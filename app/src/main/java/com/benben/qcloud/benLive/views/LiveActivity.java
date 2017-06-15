@@ -38,12 +38,35 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.adapters.ChatMsgListAdapter;
+import com.benben.qcloud.benLive.adapters.LinkAdapter;
+import com.benben.qcloud.benLive.gift.GiftsDialog;
+import com.benben.qcloud.benLive.model.ChatEntity;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
+import com.benben.qcloud.benLive.model.LiveInfoJson;
+import com.benben.qcloud.benLive.model.MemberID;
+import com.benben.qcloud.benLive.model.MySelfInfo;
+import com.benben.qcloud.benLive.model.RoomInfoJson;
+import com.benben.qcloud.benLive.presenters.GetLinkSignHelper;
 import com.benben.qcloud.benLive.presenters.LiveHelper;
+import com.benben.qcloud.benLive.presenters.LiveListViewHelper;
 import com.benben.qcloud.benLive.presenters.UserServerHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.GetLinkSigView;
+import com.benben.qcloud.benLive.presenters.viewinface.LiveListView;
+import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
+import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
+import com.benben.qcloud.benLive.utils.Constants;
+import com.benben.qcloud.benLive.utils.GlideCircleTransform;
+import com.benben.qcloud.benLive.utils.LogConstants;
+import com.benben.qcloud.benLive.utils.SxbLog;
+import com.benben.qcloud.benLive.utils.UIUtils;
+import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 import com.benben.qcloud.benLive.views.customviews.HeartLayout;
+import com.benben.qcloud.benLive.views.customviews.InputTextMsgDialog;
+import com.benben.qcloud.benLive.views.customviews.MembersDialog;
+import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
+import com.benben.qcloud.benLive.views.customviews.SpeedTestDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMMessage;
@@ -71,28 +94,6 @@ import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.livesdk.ILVText;
-import com.benben.qcloud.benLive.R;
-import com.benben.qcloud.benLive.adapters.LinkAdapter;
-import com.benben.qcloud.benLive.model.ChatEntity;
-import com.benben.qcloud.benLive.model.LiveInfoJson;
-import com.benben.qcloud.benLive.model.MemberID;
-import com.benben.qcloud.benLive.model.MySelfInfo;
-import com.benben.qcloud.benLive.model.RoomInfoJson;
-import com.benben.qcloud.benLive.presenters.GetLinkSignHelper;
-import com.benben.qcloud.benLive.presenters.LiveListViewHelper;
-import com.benben.qcloud.benLive.presenters.viewinface.LiveListView;
-import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
-import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
-import com.benben.qcloud.benLive.utils.Constants;
-import com.benben.qcloud.benLive.utils.GlideCircleTransform;
-import com.benben.qcloud.benLive.utils.LogConstants;
-import com.benben.qcloud.benLive.utils.SxbLog;
-import com.benben.qcloud.benLive.utils.UIUtils;
-import com.benben.qcloud.benLive.views.customviews.BaseActivity;
-import com.benben.qcloud.benLive.views.customviews.InputTextMsgDialog;
-import com.benben.qcloud.benLive.views.customviews.MembersDialog;
-import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
-import com.benben.qcloud.benLive.views.customviews.SpeedTestDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -458,6 +459,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             findViewById(R.id.member_message_input).setOnClickListener(this);
             findViewById(R.id.member_send_good).setOnClickListener(this);
             findViewById(R.id.member_menu_more).setOnClickListener(this);
+
+            // 设置礼物按钮点击事件
+            findViewById(R.id.member_send_gift).setOnClickListener(this);
 
             findViewById(R.id.vmember_beauty_btn).setOnClickListener(this);
             findViewById(R.id.vmember_menu_more).setOnClickListener(this);
@@ -1284,6 +1288,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
                     tvAdmires.setText("" + CurLiveInfo.getAdmires());
                 }
+                break;
+            // 点击显示礼物列表
+            case R.id.member_send_gift:
+                GiftsDialog dialog = GiftsDialog.newInstance();
+                dialog.show(getSupportFragmentManager(),"send_gift");
                 break;
             case R.id.host_switch_cam:
             case R.id.vmember_switch_cam:

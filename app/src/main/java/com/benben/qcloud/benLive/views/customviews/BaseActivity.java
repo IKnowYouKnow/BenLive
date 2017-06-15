@@ -1,11 +1,11 @@
 package com.benben.qcloud.benLive.views.customviews;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.model.MySelfInfo;
@@ -21,7 +21,7 @@ import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 /**
  * Created by admin on 2016/5/20.
  */
-public class BaseActivity extends Activity{
+public class BaseActivity extends FragmentActivity{
     private BroadcastReceiver recv;
     private ConnectionChangeReceiver netWorkStateReceiver;
 

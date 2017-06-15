@@ -7,35 +7,44 @@
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/member_message_input"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_message"
-        />
+        android:background="@drawable/icon_message" />
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/member_send_good"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_like"
-        />
-
+        android:background="@drawable/icon_like" />
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/member_send_gift"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:background="@drawable/gift_btn" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/member_menu_more"
@@ -46,8 +55,8 @@
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/member_fullscreen_btn"
@@ -58,7 +67,7 @@
 
     <View
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="40dp" />
+        android:layout_height="40dp"
+        android:layout_weight="1" />
 
 </LinearLayout>
