@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@color/btn_red"
+        android:background="@drawable/shape_title"
         android:gravity="center_vertical">
 
 
@@ -214,7 +214,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="150dp"
-        android:background="@color/btn_red"
+        android:background="@color/tencent_tls_ui_titleBackground"
         android:gravity="center"
         android:onClick="onClick"
         android:text="@string/text_publish"
