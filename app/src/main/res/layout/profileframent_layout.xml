@@ -6,46 +6,61 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@color/colorRed"
-        android:gravity="center"
+        android:background="@drawable/shape_title"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
-        <ImageView
-            android:id="@+id/profile_avatar"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="个人中心"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            />
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <TextView
-                android:id="@+id/profile_name"
-                android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <ImageView
+                android:id="@+id/profile_avatar"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="20sp" />
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorTextWhite"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/profile_id"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/profile_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorGray3"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/edit_profile"
+                android:layout_gravity="top"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorGray3"
-                android:textSize="18sp" />
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/edit" />
         </LinearLayout>
-        <ImageView
-            android:id="@+id/edit_profile"
-            android:layout_gravity="top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/edit" />
     </LinearLayout>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,6 +92,7 @@
         app:isBottom="true"
         app:canNav="true"
         />
+
     <com.benben.qcloud.benLive.views.customviews.LineControllerView
         android:id="@+id/lcv_video_qulity"
         android:layout_width="match_parent"
@@ -85,6 +101,7 @@
         app:isBottom="true"
         app:canNav="true"
         />
+
     <com.benben.qcloud.benLive.views.customviews.LineControllerView
         android:id="@+id/lcv_set_log_level"
         android:layout_width="match_parent"
@@ -104,12 +121,34 @@
         />
 
     <com.benben.qcloud.benLive.views.customviews.LineControllerView
+        android:id="@+id/lcv_my_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="我的钱包"
+        app:isBottom="true"
+        app:canNav="false"/>
+    <com.benben.qcloud.benLive.views.customviews.LineControllerView
+        android:id="@+id/lcv_integral_center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="积分中心"
+        app:isBottom="true"
+        app:canNav="false"/>
+
+    <com.benben.qcloud.benLive.views.customviews.LineControllerView
         android:layout_width="match_parent"
         android:layout_height="40dp"
         app:name="@string/set_sdk_version"
         android:id="@+id/version"
         app:isBottom="true"
-        app:canNav="true"/>
+        app:canNav="false"/>
+    <com.benben.qcloud.benLive.views.customviews.LineControllerView
+        android:id="@+id/lcv_setting"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:name="设置"
+        app:canNav="false"
+        />
 
     <View
         android:layout_width="match_parent"
@@ -119,7 +158,7 @@
     <TextView
         android:id="@+id/tv_logout"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="100dp"
