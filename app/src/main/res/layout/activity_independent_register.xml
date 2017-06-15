@@ -1,10 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tencent_tls_ui_background"
-    tools:context=".IndependentRegisterActivity">
+    android:background="@color/tencent_tls_ui_background">
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -47,37 +45,89 @@
         android:paddingRight="@dimen/tencent_tls_ui_activity_horizontal_margin"
         android:layout_weight="9">
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/tencent_tls_ui_edittext_height"
-            android:paddingLeft="@dimen/tencent_tls_ui_edittext_leftpadding"
-            android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
-            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
-            android:singleLine="true"
-            android:hint="用户名为4~24个字符，不能为纯数字"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal">
+            <TextView
+                android:layout_width="90dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:text="用户名"
+                android:layout_marginRight="5dp"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:singleLine="true"
+                android:background="#0fff"
+                android:hint="4~24个字符，不能为纯数字"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal">
+            <TextView
+                android:layout_width="90dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:text="昵称"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/nick"
+                android:layout_width="fill_parent"
+                android:background="#0fff"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:singleLine="true"
+                android:hint="请输入您的昵称"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal">
+            <TextView
+                android:layout_width="90dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:text="密码"
+                android:textSize="18sp"/>
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:singleLine="true"
+                android:background="#0fff"
+                android:inputType="textPassword"
+                android:hint="密码长度为8~16个字符"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal">
+            <TextView
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="确认密码"
+                android:textSize="18sp"/>
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/tencent_tls_ui_edittext_height"
-            android:paddingLeft="@dimen/tencent_tls_ui_edittext_leftpadding"
-            android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
-            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:hint="密码长度为8~16个字符"/>
-
-        <EditText
-            android:id="@+id/repassword"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/tencent_tls_ui_edittext_height"
-            android:paddingLeft="@dimen/tencent_tls_ui_edittext_leftpadding"
-            android:layout_marginBottom="@dimen/tencent_tls_ui_edittext_margin"
-            android:background="@drawable/tencent_tls_ui_rounded_rectangle_normal"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:hint="确认密码"/>
+            <EditText
+                android:id="@+id/repassword"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:singleLine="true"
+                android:background="#0fff"
+                android:inputType="textPassword"
+                android:hint="密码长度为8~16个字符"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_register"
@@ -91,7 +141,6 @@
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>
