@@ -12,35 +12,51 @@
         android:id="@+id/quality_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true" />
+        android:layout_marginTop="20dp" />
+
     <TextView
         android:id="@+id/quality_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_below="@id/quality_circle"
         android:layout_alignRight="@id/quality_circle"
+        android:layout_below="@id/quality_circle"
+        android:layout_marginTop="5dp"
         android:textColor="#FFFFFF" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="150dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:paddingTop="150dp">
 
         <TextView
             android:id="@+id/qav_tips_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:visibility="invisible"
             android:background="@color/colorGray4"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="invisible" />
 
     </ScrollView>
 
+    <com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView
+        android:id="@+id/left_gift_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/left_gift_view2"
+        android:layout_marginBottom="4dp"
+        android:visibility="invisible" />
+
+    <com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView
+        android:id="@+id/left_gift_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:id="@+id/controll_ui"
@@ -61,18 +77,20 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:text="" />
+            android:text=""
+            android:textColor="@color/white" />
 
 
         <LinearLayout
-            android:layout_marginTop="70dp"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/video_interact"
                     android:layout_width="wrap_content"
@@ -83,74 +101,72 @@
                     android:background="@drawable/icon_video_interact" />
 
                 <LinearLayout
-                    android:gravity="right"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
 
                     <TextView
-                        style="@style/live_btn"
                         android:id="@+id/param_video"
-                        android:layout_marginRight="10dp"
+                        style="@style/live_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
                         android:text="@string/live_btn_par" />
 
 
                     <TextView
-                        style="@style/live_btn"
                         android:id="@+id/push_btn"
+                        style="@style/live_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:visibility="gone"
                         android:text="@string/live_btn_push"
-                        />
+                        android:visibility="gone" />
 
                     <TextView
-                        style="@style/live_btn"
                         android:id="@+id/speed_test_btn"
+                        style="@style/live_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:text="@string/ping_speed_test"
-                        />
+                        android:text="@string/ping_speed_test" />
 
 
                     <TextView
-                        style="@style/live_btn"
                         android:id="@+id/record_btn"
+                        style="@style/live_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:visibility="gone"
+                        android:gravity="center"
                         android:text="@string/live_btn_record"
-                        android:gravity="center" />
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp">
 
                 <TextView
-                    style="@style/live_btn"
                     android:id="@+id/link_btn"
-                    android:visibility="invisible"
+                    style="@style/live_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text="@string/live_btn_link"
-                    />
+                    android:visibility="invisible" />
+
                 <TextView
-                    style="@style/live_btn"
                     android:id="@+id/unlink_btn"
-                    android:visibility="invisible"
+                    style="@style/live_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text="@string/live_btn_unlink"
-                    />
+                    android:visibility="invisible" />
             </LinearLayout>
         </LinearLayout>
 
@@ -204,13 +220,13 @@
             android:layout_marginTop="15dp" />
 
         <include
-                layout="@layout/host_bottom_layout2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:visibility="gone"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp" />
+            layout="@layout/host_bottom_layout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:visibility="gone" />
 
 
         <RelativeLayout
@@ -234,9 +250,9 @@
     <include
         android:id="@+id/qav_beauty_setting"
         layout="@layout/qav_beauty_setting"
-        android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="20dp" />
 
@@ -254,30 +270,32 @@
 
     <LinearLayout
         android:id="@+id/ll_host_leave"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:visibility="gone">
+
         <ImageView
-            android:src="@drawable/host_leave"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/host_leave" />
+
         <TextView
-            android:text="@string/live_host_leave"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorGray3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/live_host_leave"
+            android:textColor="@color/colorGray3" />
     </LinearLayout>
 
     <include
-            android:id="@+id/invite_views"
-            layout="@layout/invite_views"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+        android:id="@+id/invite_views"
+        layout="@layout/invite_views"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 </RelativeLayout>
