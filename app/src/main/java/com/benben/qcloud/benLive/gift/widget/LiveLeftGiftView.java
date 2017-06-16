@@ -54,6 +54,10 @@ public class LiveLeftGiftView extends RelativeLayout {
         Glide.with(getContext()).load(avatar).into(this.avatar);
     }
 
+    public void setAvatar(int avatarID) {
+        avatar.setImageResource(avatarID);
+    }
+
     public ImageView getGiftImageView(){
         return giftImage;
     }

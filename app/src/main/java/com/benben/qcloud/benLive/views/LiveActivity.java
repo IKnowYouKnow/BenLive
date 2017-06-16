@@ -42,6 +42,7 @@ import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.adapters.ChatMsgListAdapter;
 import com.benben.qcloud.benLive.adapters.LinkAdapter;
 import com.benben.qcloud.benLive.gift.GiftsDialog;
+import com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView;
 import com.benben.qcloud.benLive.model.ChatEntity;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
 import com.benben.qcloud.benLive.model.LiveInfoJson;
@@ -69,7 +70,10 @@ import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
 import com.benben.qcloud.benLive.views.customviews.SpeedTestDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.github.florent37.viewanimator.AnimationListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.tencent.TIMMessage;
+import com.tencent.TIMTextElem;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.extra.effect.AVVideoEffect;
@@ -96,14 +100,17 @@ import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.livesdk.ILVText;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-
 
 /**
  * Live直播类
@@ -111,7 +118,6 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener, ProfileView, LiveListView, GetLinkSigView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
-
     private LiveHelper mLiveHelper;
     private LiveListViewHelper mLiveListHelper;
     private GetLinkSignHelper mLinkHelper;
@@ -163,6 +169,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private TILFilter mUDFilter; //美颜处理器
 
+    // 显示礼物动画控件
+    @BindView(R.id.left_gift_view1)
+    LiveLeftGiftView leftGiftView1;
+    @BindView(R.id.left_gift_view2)
+    LiveLeftGiftView leftGiftView2;
+
+    // 设置标志位，显示礼物
+    volatile boolean isGiftShowing = false;
+    volatile boolean isGift2Showing = false;
+
+    // 存放来不及显示的礼物
+    List<TIMMessage> toShowList = Collections.synchronizedList(new LinkedList<TIMMessage>());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +189,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live);
+        ButterKnife.bind(this);
         checkPermission();
 
         mLiveHelper = new LiveHelper(this, this);
@@ -188,7 +207,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public boolean handleMessage(android.os.Message msg) {
+        public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case UPDAT_WALL_TIME_TIMER_TASK:
                     updateWallTime();
@@ -1300,6 +1319,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                     @Override
                     public void onClick(View v) {
                         int giftId = (int) v.getTag();
+                        sendGift(giftId);
                         Toast.makeText(LiveActivity.this, "giftID = " + giftId, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -2052,4 +2072,142 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         dialog.show();
     }
+
+    // 发送礼物
+    private void sendGift(int giftId) {
+        if (giftId < 0)
+            return;
+        TIMMessage Nmsg = new TIMMessage();
+        TIMTextElem elem = new TIMTextElem();
+        elem.setText("送了一个礼物" + giftId);
+        if (Nmsg.addElement(elem) != 0) {
+            return;
+        }
+        Nmsg.setSender(MySelfInfo.getInstance().getId());
+        Nmsg.setCustomInt(giftId);
+        Nmsg.setCustomStr(MySelfInfo.getInstance().getNickName());
+        ILiveRoomManager.getInstance().sendGroupMessage(Nmsg, new ILiveCallBack<TIMMessage>() {
+            @Override
+            public void onSuccess(TIMMessage data) {
+                //发送成回显示消息内容
+                showLeftGiftView(data);
+//                for (int j = 0; j < data.getElementCount(); j++) {
+//                    TIMElem elem = (TIMElem) data.getElement(0);
+//                    TIMTextElem textElem = (TIMTextElem) elem;
+//                    if (data.isSelf()) {
+//                        refreshText(textElem.getText(), MySelfInfo.getInstance().getNickName());
+//                    } else {
+//                        TIMUserProfile sendUser = data.getSenderProfile();
+//                        String name;
+//                        if (sendUser != null) {
+//                            name = sendUser.getNickName();
+//                        } else {
+//                            name = data.getSender();
+//                        }
+//                        refreshText(textElem.getText(), name);
+//                    }
+//                }
+                SxbLog.d(TAG, "sendGroupMessage->success");
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                Toast.makeText(LiveActivity.this, "send gift failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // 显示礼物动画
+    protected synchronized void showLeftGiftView(TIMMessage message) {
+
+        try {
+            String name = message.getSender();
+            int giftId = message.getCustomInt();
+            String nick = message.getCustomStr();
+            Log.e(TAG,"showLeftGiftView,name="+name+",giftid="+giftId+",nick="+nick);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!isGift2Showing) {
+            showGift2Direct(message);
+        } else if (!isGiftShowing) {
+            showGift1Direct(message);
+        } else {
+            toShowList.add(message);
+        }
+    }
+
+    private void showGift1Direct(final TIMMessage message) {
+        isGiftShowing = true;
+        animateGiftView(message, leftGiftView1, new AnimationListener.Stop() {
+            @Override public void onStop() {
+                TIMMessage pollName = null;
+                try {
+                    pollName = toShowList.remove(0);
+                } catch (Exception e) {
+
+                }
+                if (pollName != null) {
+                    showGift1Direct(pollName);
+                } else {
+                    isGiftShowing = false;
+                }
+            }
+        });
+    }
+
+    private void showGift2Direct(final TIMMessage message) {
+        isGift2Showing = true;
+        animateGiftView(message, leftGiftView2, new AnimationListener.Stop() {
+            @Override public void onStop() {
+                TIMMessage pollName = null;
+                try {
+                    pollName = toShowList.remove(0);
+                } catch (Exception e) {
+
+                }
+                if (pollName != null) {
+                    showGift2Direct(pollName);
+                } else {
+                    isGift2Showing = false;
+                }
+            }
+        });
+    }
+
+    private void animateGiftView(final TIMMessage message, final LiveLeftGiftView giftView, final AnimationListener.Stop animationStop) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                int giftId = 0;
+                String nick = message.getSender();
+                try {
+                    giftId = message.getCustomInt();
+                    nick = message.getCustomStr();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                giftView.setVisibility(View.VISIBLE);
+                giftView.setName(nick);
+                giftView.setAvatar(message.getSender());
+//                giftView.setGift(giftId);
+                giftView.setTranslationY(0);
+                ViewAnimator.animate(giftView)
+                        .alpha(0, 1)
+                        .translationX(-giftView.getWidth(), 0)
+                        .duration(600)
+                        .thenAnimate(giftView)
+                        .alpha(1, 0)
+                        .translationY(-1.5f * giftView.getHeight())
+                        .duration(800)
+                        .onStop(animationStop)
+                        .startDelay(2000)
+                        .start();
+                ViewAnimator.animate(giftView.getGiftImageView())
+                        .translationX(-giftView.getGiftImageView().getX(), 0)
+                        .duration(1100)
+                        .start();
+            }
+        });
+    }
+
 }
