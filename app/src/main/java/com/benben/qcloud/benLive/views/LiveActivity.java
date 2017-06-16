@@ -164,7 +164,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private TILFilter mUDFilter; //美颜处理器
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,8 +270,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
-    private void initILiveBeauty(){
-        if (null == mUDFilter){
+    private void initILiveBeauty() {
+        if (null == mUDFilter) {
             SxbLog.d(TAG, "FILTER->created");
             mUDFilter = new TILFilter(this);
             mUDFilter.setFilter(1);
@@ -319,11 +318,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         findViewById(R.id.log_report).setOnClickListener(this);
         findViewById(R.id.back_primary).setOnClickListener(this);
 
-        btnChageVoice = (TextView)findViewById(R.id.change_voice);
-        btnChangeRole = (TextView)findViewById(R.id.change_role);
-        btnFlash = (TextView)findViewById(R.id.flash_btn);
-        btnFilter = (TextView)findViewById(R.id.tv_filter);
-        btnMagic = (TextView)findViewById(R.id.tv_magic);
+        btnChageVoice = (TextView) findViewById(R.id.change_voice);
+        btnChangeRole = (TextView) findViewById(R.id.change_role);
+        btnFlash = (TextView) findViewById(R.id.flash_btn);
+        btnFilter = (TextView) findViewById(R.id.tv_filter);
+        btnMagic = (TextView) findViewById(R.id.tv_magic);
 
         btnChageVoice.setOnClickListener(this);
         btnChangeRole.setOnClickListener(this);
@@ -352,15 +351,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                           boolean fromUser) {
                 Log.i(TAG, "onProgressChanged " + progress);
                 mBeautyRate = progress;
-                if (MySelfInfo.getInstance().getBeautyType()==1){
+                if (MySelfInfo.getInstance().getBeautyType() == 1) {
                     initILiveBeauty();
-                    mUDFilter.setBeauty(progress*7/100);
-                }else {//美颜
+                    mUDFilter.setBeauty(progress * 7 / 100);
+                } else {//美颜
                     ILiveRoomManager.getInstance().enableBeauty(getBeautyProgress(progress));
                 }
             }
         });
-        mWhiteBar = (SeekBar)(findViewById(R.id.qav_white_progress));
+        mWhiteBar = (SeekBar) (findViewById(R.id.qav_white_progress));
         mWhiteBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -378,10 +377,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                                           boolean fromUser) {
                 Log.i(TAG, "onProgressChanged " + progress);
                 mWhiteRate = progress;
-                if (MySelfInfo.getInstance().getBeautyType()==1){
+                if (MySelfInfo.getInstance().getBeautyType() == 1) {
                     initILiveBeauty();
-                    mUDFilter.setWhite(progress*9/100);
-                }else {//美白
+                    mUDFilter.setWhite(progress * 9 / 100);
+                } else {//美白
                     ILiveRoomManager.getInstance().enableWhite(getBeautyProgress(progress));
                 }
             }
@@ -643,12 +642,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
-    private void callExitRoom(){
+    private void callExitRoom() {
         mLiveHelper.startExitRoom();
     }
 
 
     private Dialog backDialog;
+
     private void initBackDialog() {
         backDialog = new Dialog(this, R.style.dialog);
         backDialog.setContentView(R.layout.dialog_end_live);
@@ -693,6 +693,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     // 变声对话框
     private RadioGroupDialog voiceTypeDialog;
     private int curVoice = 0;
+
     private void initVoiceTypeDialog() {
         final String[] roles = new String[]{"原声", "萝莉", "大叔", "空灵", "幼稚园", "重机器",
                 "擎天柱", "困兽", "土掉渣/歪果仁/方言", "金属机器人", "死肥仔"};
@@ -702,7 +703,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         voiceTypeDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
+                SxbLog.d(TAG, "initRoleDialog->onClick item:" + position);
                 curRole = position;
                 ILiveSDK.getInstance().getAvAudioCtrl().setVoiceType(curRole);
             }
@@ -712,14 +713,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     // 角色对话框
     private RadioGroupDialog roleDialog;
     private int curRole = 0;
+
     private void initRoleDialog() {
-        final String[] roles = new String[]{ "高清(960*540,25fps)","标清(640*368,20fps)", "流畅(640*368,15fps)"};
+        final String[] roles = new String[]{"高清(960*540,25fps)", "标清(640*368,20fps)", "流畅(640*368,15fps)"};
         final String[] values = new String[]{Constants.HD_ROLE, Constants.SD_ROLE, Constants.LD_ROLE};
         final String[] guestValues = new String[]{Constants.HD_GUEST_ROLE, Constants.SD_GUEST_ROLE, Constants.LD_GUEST_ROLE};
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST){
-            if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)){
+        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+            if (CurLiveInfo.getCurRole().equals(Constants.SD_ROLE)) {
                 curRole = 1;
-            }else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)){
+            } else if (CurLiveInfo.getCurRole().equals(Constants.LD_ROLE)) {
                 curRole = 2;
             }
         }
@@ -730,11 +732,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
+                SxbLog.d(TAG, "initRoleDialog->onClick item:" + position);
                 curRole = position;
                 if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
                     mLiveHelper.changeRole(values[curRole]);
-                }else{
+                } else {
                     mLiveHelper.changeRole(guestValues[curRole]);
                 }
             }
@@ -744,25 +746,26 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     // 滤镜对话框
     private RadioGroupDialog filterDialog;
     private int curFilter = 0;
+
     private void initFilterDialog() {
         final String filterRootPath = "assets://qaveffect/filter/";
-        final String[] filters = new String[]{ "清空滤镜",  "漫画(COMIC)",
+        final String[] filters = new String[]{"清空滤镜", "漫画(COMIC)",
                 "盛夏(GESE)", "暖阳(BRIGHTFIRE)",
                 "月光(SKYLINE)", "蔷薇(G1)",
                 "幽兰(ORCHID)", "圣代(SHENGDAI)",
-                "薄荷(AMARO)","浪漫(FENBI)"};
-        final String[] values = new String[]{null, filterRootPath+"COMIC",
-                filterRootPath+"GESE", filterRootPath+"BRIGHTFIRE",
-                filterRootPath+"SKYLINE", filterRootPath+"G1",
-                filterRootPath+"ORCHID", filterRootPath+"SHENGDAI",
-                filterRootPath+"AMARO",filterRootPath+"FENBI"};
+                "薄荷(AMARO)", "浪漫(FENBI)"};
+        final String[] values = new String[]{null, filterRootPath + "COMIC",
+                filterRootPath + "GESE", filterRootPath + "BRIGHTFIRE",
+                filterRootPath + "SKYLINE", filterRootPath + "G1",
+                filterRootPath + "ORCHID", filterRootPath + "SHENGDAI",
+                filterRootPath + "AMARO", filterRootPath + "FENBI"};
         filterDialog = new RadioGroupDialog(this, filters);
         filterDialog.setTitle(R.string.str_dt_filter);
         filterDialog.setSelected(curFilter);
         filterDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                SxbLog.d(TAG, "initFilterDialog->onClick item:"+position);
+                SxbLog.d(TAG, "initFilterDialog->onClick item:" + position);
                 curFilter = position;
                 AVVideoEffect.getInstance(LiveActivity.this).setFilter(values[position]);
             }
@@ -772,17 +775,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     // 脸萌对话框
     private RadioGroupDialog magicDialog;
     private int curMagic = 0;
+
     private void initMagicDialog() {
         final String filterRootPath = "assets://qaveffect/pendant/";
-        final String[] filters = new String[]{ "清空挂件", "兔子", "白雪公主"};
-        final String[] values = new String[]{null, filterRootPath+"video_rabbit", filterRootPath+"video_snow_white"};
+        final String[] filters = new String[]{"清空挂件", "兔子", "白雪公主"};
+        final String[] values = new String[]{null, filterRootPath + "video_rabbit", filterRootPath + "video_snow_white"};
         magicDialog = new RadioGroupDialog(this, filters);
         magicDialog.setTitle(R.string.str_dt_magic);
         magicDialog.setSelected(curMagic);
         magicDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                SxbLog.d(TAG, "initMagicDialog->onClick item:"+position);
+                SxbLog.d(TAG, "initMagicDialog->onClick item:" + position);
                 curMagic = position;
                 AVVideoEffect.getInstance(LiveActivity.this).setPendant(values[position]);
             }
@@ -944,11 +948,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void linkRoomReq(final String id, String name) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST){
+        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.live_btn_link);
-            builder.setMessage("["+id+"]"+getString(R.string.str_link_req_tips));
-            builder.setNegativeButton(R.string.btn_refuse, new DialogInterface.OnClickListener(){
+            builder.setMessage("[" + id + "]" + getString(R.string.str_link_req_tips));
+            builder.setNegativeButton(R.string.btn_refuse, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     mLiveHelper.refuseLink(id);
@@ -961,17 +965,17 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 }
             });
             builder.show();
-        }else{
+        } else {
             mLiveHelper.refuseLink(id);
         }
     }
 
     @Override
     public void linkRoomAccept(final String id, final String strRoomId) {
-        SxbLog.d(TAG, "linkRoomAccept->id:"+id+", room:"+strRoomId);
+        SxbLog.d(TAG, "linkRoomAccept->id:" + id + ", room:" + strRoomId);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.live_btn_link);
-        builder.setMessage("["+id+"]"+getString(R.string.str_link_start_tips));
+        builder.setMessage("[" + id + "]" + getString(R.string.str_link_start_tips));
         builder.setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -984,7 +988,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void onGetSignRsp(String id, String roomid, String sign) {
-        SxbLog.d(TAG, "onGetSignRsp->id:"+id+", room:"+roomid+", sign:"+sign);
+        SxbLog.d(TAG, "onGetSignRsp->id:" + id + ", room:" + roomid + ", sign:" + sign);
         mLiveHelper.linkRoom(id, roomid, sign);
     }
 
@@ -1192,13 +1196,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         reportDialog.show();
     }
 
-    private void showLogDialog(){
+    private void showLogDialog() {
         final Dialog dialog = new Dialog(this, R.style.common_dlg);
         dialog.setContentView(R.layout.dialog_log_upload);
 
         dialog.setTitle(R.string.str_title_logupload);
 
-        final EditText etDate = (EditText)dialog.findViewById(R.id.et_date);
+        final EditText etDate = (EditText) dialog.findViewById(R.id.et_date);
         dialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1209,11 +1213,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onClick(View view) {
                 int date = 0;
-                try{
+                try {
                     date = Integer.valueOf(etDate.getText().toString());
-                }catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                 }
-                ILiveSDK.getInstance().uploadLog("report log", date,  new ILiveCallBack(){
+                ILiveSDK.getInstance().uploadLog("report log", date, new ILiveCallBack() {
                     @Override
                     public void onSuccess(Object data) {
                         Toast.makeText(LiveActivity.this, "Log report succ!", Toast.LENGTH_SHORT).show();
@@ -1221,7 +1225,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
                     @Override
                     public void onError(String module, int errCode, String errMsg) {
-                        Toast.makeText(LiveActivity.this, "failed:"+module+"|"+errCode+"|"+errMsg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LiveActivity.this, "failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
                     }
                 });
                 dialog.dismiss();
@@ -1274,7 +1278,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.host_message_input:
             case R.id.member_message_input:
             case R.id.vmember_message_input:
@@ -1292,11 +1296,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             // 点击显示礼物列表
             case R.id.member_send_gift:
                 GiftsDialog dialog = GiftsDialog.newInstance();
-                dialog.show(getSupportFragmentManager(),"send_gift");
+                dialog.setListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int giftId = (int) v.getTag();
+                        Toast.makeText(LiveActivity.this, "giftID = " + giftId, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show(getSupportFragmentManager(), "send_gift");
                 break;
             case R.id.host_switch_cam:
             case R.id.vmember_switch_cam:
-                ILiveRoomManager.getInstance().enableCamera(1-ILiveRoomManager.getInstance().getCurCameraId(), true);
+                ILiveRoomManager.getInstance().enableCamera(1 - ILiveRoomManager.getInstance().getCurCameraId(), true);
                 break;
             case R.id.host_mic_btn:
             case R.id.vmember_mic_btn:
@@ -1312,7 +1323,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 break;
             case R.id.host_beauty_btn:
             case R.id.vmember_beauty_btn:
-                Log.i(TAG, "onClick->beauty:" + mBeautyRate+", whote:"+mWhiteRate);
+                Log.i(TAG, "onClick->beauty:" + mBeautyRate + ", whote:" + mWhiteRate);
                 if (mBeautySettings != null) {
                     if (mBeautySettings.getVisibility() == View.GONE) {
                         mBeautySettings.setVisibility(View.VISIBLE);
@@ -1365,7 +1376,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 } else {
                     if (bVideoMember) { // 上麦观众
                         mVideoMemberCtrlView.setVisibility(View.VISIBLE);
-                    }else{    // 普通观众
+                    } else {    // 普通观众
                         mNomalMemberCtrView.setVisibility(View.VISIBLE);
                     }
                 }
@@ -1489,13 +1500,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void changeCtrlView(boolean videoMember) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST){
+        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             // 主播不存在切换
             return;
         }
         bVideoMember = videoMember;
         mCtrViewMore.setVisibility(View.INVISIBLE);
-        if (bVideoMember){
+        if (bVideoMember) {
             mVideoMemberCtrlView.setVisibility(View.VISIBLE);
             mNomalMemberCtrView.setVisibility(View.GONE);
 
@@ -1504,7 +1515,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             btnFlash.setVisibility(View.VISIBLE);
             btnFilter.setVisibility(View.VISIBLE);
             btnMagic.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mVideoMemberCtrlView.setVisibility(View.GONE);
             mNomalMemberCtrView.setVisibility(View.VISIBLE);
 
@@ -1920,7 +1931,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             return;
         }
 
-        if (null == livelist || 0 == livelist.size()){
+        if (null == livelist || 0 == livelist.size()) {
             SxbLog.d(TAG, "showRoomList->there room list is empty");
             return;
         }
@@ -2007,19 +2018,19 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         return strTips;
     }
 
-    private void showLinkDialog(){
+    private void showLinkDialog() {
         final Dialog dialog = new Dialog(this, R.style.common_dlg);
         dialog.setContentView(R.layout.dialog_link);
 
-        ListView listView = (ListView)dialog.findViewById(R.id.lv_linklist) ;
+        ListView listView = (ListView) dialog.findViewById(R.id.lv_linklist);
         LinkAdapter adapter = new LinkAdapter(this);
         adapter.setOnItemClickListenr(new LinkAdapter.OnItemClick() {
             @Override
             public void onClick(RoomInfoJson info) {
                 List<String> curLinkedList = ILVLiveManager.getInstance().getCurrentLinkedUserArray();
-                if (null != curLinkedList && curLinkedList.size() >= 3){
+                if (null != curLinkedList && curLinkedList.size() >= 3) {
                     Toast.makeText(LiveActivity.this, getString(R.string.str_tips_link_limit), Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     mLiveHelper.sendLinkReq(info.getHostId());
                 }
                 dialog.dismiss();
@@ -2027,7 +2038,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
         listView.setAdapter(adapter);
 
-        Button btnCancel = (Button)dialog.findViewById(R.id.btn_cancel);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

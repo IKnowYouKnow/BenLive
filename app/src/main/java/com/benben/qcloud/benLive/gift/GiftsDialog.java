@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ public class GiftsDialog extends DialogFragment {
     TextView tvMyMoney;
     @BindView(R.id.tv_recharge)
     TextView tvRecharge;
+    private static final String TAG = "GiftHolder";
 
     int money = 100;
     private static String URL = "http://218.244.151.190/demo/charge";
@@ -78,14 +80,13 @@ public class GiftsDialog extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 
         giftList = new ArrayList<>();
-        Gift gift = new Gift();
-        gift.setGname("鲜花");
-        gift.setGprice(17);
         for (int i = 0; i < 12; i++) {
-            gift.setId(i + 1);
+            Gift gift = new Gift();
+            gift.setGname("鲜花"+i);
+            gift.setGprice(17+i);
+            gift.setId(i);
             giftList.add(gift);
         }
-        giftList.add(gift);
 
         if (giftList.size() > 0) {
             if (adapter == null) {
@@ -93,6 +94,10 @@ public class GiftsDialog extends DialogFragment {
                 rvGift.setAdapter(adapter);
             } else {
                 adapter.notifyDataSetChanged();
+            }
+
+            for (Gift gift1 : giftList) {
+                Log.e(TAG, "onActivityCreated: gift1" + gift1);
             }
         }
 
@@ -130,7 +135,7 @@ public class GiftsDialog extends DialogFragment {
     class GiftAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Context mContext;
         ArrayList<Gift> mList;
-        int[] giftId = {
+        int[] giftPicId = {
                 R.drawable.pl_blue, R.drawable.pl_red, R.drawable.pl_yellow, R.drawable.test_avatar1,
                 R.drawable.test_avatar2, R.drawable.test_avatar3, R.drawable.test_avatar4, R.drawable.test_avatar5,
                 R.drawable.test_avatar6, R.drawable.test_avatar7, R.drawable.test_avatar8, R.drawable.test_avatar9};
@@ -178,9 +183,10 @@ public class GiftsDialog extends DialogFragment {
             public void bind(Gift gift, int position) {
                 tvGiftName.setText(gift.getGname());
                 tvGiftPrice.setText(gift.getGprice() + "");
-                ivGiftThumb.setImageResource(giftId[position]);
-                layoutGift.setTag(gift.getId());
-                layoutGift.setOnClickListener(mListener);
+                ivGiftThumb.setImageResource(giftPicId[position]);
+                Log.e(TAG, "bind: gift.getID = " + gift.getId());
+                itemView.setTag(gift.getId());
+                itemView.setOnClickListener(mListener);
             }
         }
     }
