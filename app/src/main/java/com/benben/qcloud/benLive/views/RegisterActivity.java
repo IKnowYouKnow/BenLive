@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.benben.qcloud.benLive.QavsdkApplication;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
+import com.benben.qcloud.benLive.utils.MD5;
 import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 
 /**
@@ -77,7 +78,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
             //注册一个账号
-            mLoginHeloper.standardRegister(userId, mPassword.getText().toString());
+            mLoginHeloper.standardRegister(userId, MD5.getMessageDigest(mPassword.getText().toString()));
         }
         if (view.getId() == com.benben.qcloud.benLive.R.id.back) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
