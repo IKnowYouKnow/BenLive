@@ -10,10 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.InitBusinessHelper;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
+import com.benben.qcloud.benLive.utils.MD5;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 
@@ -67,12 +69,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == com.benben.qcloud.benLive.R.id.registerNewUser) {
+        if (view.getId() == R.id.registerNewUser) {
             Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intent);
             finish();
         }
-        if (view.getId() == com.benben.qcloud.benLive.R.id.btn_login) {//登录账号系统TLS
+        if (view.getId() == R.id.btn_login) {//登录账号系统TLS
             if (mUserName.getText().equals("")) {
                 Toast.makeText(LoginActivity.this, "name can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
@@ -81,7 +83,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 Toast.makeText(LoginActivity.this, "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            mLoginHeloper.standardLogin(mUserName.getText().toString(), mPassWord.getText().toString());
+            mLoginHeloper.standardLogin(mUserName.getText().toString(), MD5.getMessageDigest(mPassWord.getText().toString()));
         }
     }
 
