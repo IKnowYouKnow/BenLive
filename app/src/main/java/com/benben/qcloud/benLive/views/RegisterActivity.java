@@ -10,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.QavsdkApplication;
+import com.benben.qcloud.benLive.model.IUserModel;
+import com.benben.qcloud.benLive.model.OnCompleteListener;
+import com.benben.qcloud.benLive.model.UserModel;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
 import com.benben.qcloud.benLive.utils.MD5;
@@ -78,6 +81,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
             //注册一个账号
+            IUserModel model = new UserModel();
+            model.register(this, userId, "jack", MD5.getMessageDigest(mPassword.getText().toString()),
+                    new OnCompleteListener() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            Log.e(TAG, "onSuccess: result = " + result);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e(TAG, "onError: error = " + error);
+                        }
+                    });
+            Log.e(TAG, "onClick: 开始注册了");
             mLoginHeloper.standardRegister(userId, MD5.getMessageDigest(mPassword.getText().toString()));
         }
         if (view.getId() == com.benben.qcloud.benLive.R.id.back) {
