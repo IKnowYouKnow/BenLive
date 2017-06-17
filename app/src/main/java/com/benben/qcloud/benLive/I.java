@@ -7,10 +7,10 @@ public interface I {
 	String REQUEST_CODE_IS_CHAT = "request_code_is_chat";
 
     public static interface User {
-		String TABLE_NAME							=		"t_superwechat_user";
-		String USER_NAME 							= 		"m_user_name";					//用户账号
-		String PASSWORD 							= 		"m_user_password";				//用户密码
-		String NICK 								= 		"m_user_nick";					//用户昵称
+		String TABLE_NAME							=		"t_user";
+		String USER_NAME 							= 		"user_name";					//用户账号
+		String PASSWORD 							= 		"user_pwd";				//用户密码
+		String NICK 								= 		"user_nickname";					//用户昵称
 	}
 	
 	public static interface Contact {
@@ -134,7 +134,7 @@ public interface I {
 	int MSG_ILLEGAL_REQUEST							=		-1;								//非法请求
 
 //	String SERVER_ROOT = "http://120.26.242.249:8080/SuperWeChatServerV2.0/";
-	String SERVER_ROOT = "http://101.251.196.90:8080/SuperWeChatServerV2.0/";
+	String SERVER_ROOT = "http://zhiboapi.zikaozhuxue.net/home/user/";
 
 	/** 上传头像图片的类型：user_avatar或group_icon */
 	String AVATAR_TYPE 								= 		"avatarType";
