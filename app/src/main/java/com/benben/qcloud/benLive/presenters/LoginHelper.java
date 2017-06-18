@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.presenters.viewinface.BenLiveHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
 import com.benben.qcloud.benLive.presenters.viewinface.LogoutView;
 import com.tencent.ilivesdk.ILiveCallBack;
@@ -93,6 +94,7 @@ public class LoginHelper extends Presenter {
                 SxbLog.i(TAG, "IMLogout succ !");
                 //清除本地缓存
                 MySelfInfo.getInstance().clearCache(mContext);
+                BenLiveHelper.getInstance().reset(mContext);
                 mLogoutView.logoutSucc();
             }
 
