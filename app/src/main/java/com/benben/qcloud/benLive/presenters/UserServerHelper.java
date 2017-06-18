@@ -1,18 +1,18 @@
 package com.benben.qcloud.benLive.presenters;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.util.Log;
 
-import com.tencent.ilivesdk.core.ILiveLog;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
 import com.benben.qcloud.benLive.model.MemberID;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.model.RecordInfo;
 import com.benben.qcloud.benLive.model.RoomInfoJson;
+import com.benben.qcloud.benLive.presenters.viewinface.BenLiveHelper;
 import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.SxbLog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tencent.ilivesdk.core.ILiveLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -170,6 +170,8 @@ public class UserServerHelper {
                 MySelfInfo.getInstance().setId(id);
                 MySelfInfo.getInstance().setUserSig(Sig);
                 MySelfInfo.getInstance().setToken(token);
+                // 保存登录的用户ID
+                BenLiveHelper.getInstance().syncUserInfo();
 
             }
             return new RequestBackInfo(code, errorInfo);
