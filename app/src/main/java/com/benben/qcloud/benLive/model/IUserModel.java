@@ -7,9 +7,9 @@ import android.content.Context;
 
 public interface IUserModel {
     void register(Context context, String username, String nickname, String password,
-                  OnCompleteListener listener);
+                  OnCompleteListener<String> listener);
 
-    void unregister(Context context, String username, OnCompleteListener listener);
+    void unregister(Context context, String username, OnCompleteListener<String> listener);
 
-    void getUserInfo(Context context, String username, OnCompleteListener listener);
+    void getUserInfo(Context context, String username, OnCompleteListener<String> listener);
 }

@@ -276,17 +276,17 @@ public class OkHttpUtils<T> {
         if (mMultipartBodyBuilder == null) {
             mMultipartBodyBuilder =new MultipartBody.Builder();
             mMultipartBodyBuilder.setType(MultipartBody.FORM);
-            try {
-                mUrl.append("?")
-                        .append(key)
-                        .append("=")
-                        .append(URLEncoder.encode(value, UTF_8));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }else if (mUrl.indexOf("?") > -1) {
-            mMultipartBodyBuilder.addFormDataPart(key, value);
+//            try {
+//                mUrl.append("?")
+//                        .append(key)
+//                        .append("=")
+//                        .append(URLEncoder.encode(value, UTF_8));
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+//        }else if (mUrl.indexOf("?") > -1) {
         }
+        mMultipartBodyBuilder.addFormDataPart(key, value);
         return this;
     }
 

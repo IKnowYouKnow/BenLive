@@ -80,6 +80,7 @@ dependencies {
     compile 'com.tencent.iliveptufilter:iliveptufilter:1.0.0'
     compile files('libs/MobCommons-2017.0216.1054.jar')
     compile files('libs/MobTools-2017.0216.1054.jar')
+    testCompile 'junit:junit:4.12'
 
     // 添加butterknife和recycleview依赖
     compile 'com.jakewharton:butterknife:8.4.0'

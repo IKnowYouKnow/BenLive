@@ -10,9 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.QavsdkApplication;
-import com.benben.qcloud.benLive.model.IUserModel;
-import com.benben.qcloud.benLive.model.OnCompleteListener;
-import com.benben.qcloud.benLive.model.UserModel;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
 import com.benben.qcloud.benLive.utils.MD5;
@@ -53,7 +50,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         if (view.getId() == com.benben.qcloud.benLive.R.id.btn_register) {
-            String userId = mUserName.getText().toString();
+            final String userId = mUserName.getText().toString();
             String userPW = mPassword.getText().toString();
             String userPW2 = mRepassword.getText().toString();
 
@@ -81,22 +78,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
             //注册一个账号
-            IUserModel model = new UserModel();
-            model.register(this, userId, "jack", MD5.getMessageDigest(mPassword.getText().toString()),
-                    new OnCompleteListener() {
-                        @Override
-                        public void onSuccess(Object result) {
-                            Log.e(TAG, "onSuccess: result = " + result);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Log.e(TAG, "onError: error = " + error);
-                        }
-                    });
-            Log.e(TAG, "onClick: 开始注册了");
             mLoginHeloper.standardRegister(userId, MD5.getMessageDigest(mPassword.getText().toString()));
         }
+
         if (view.getId() == com.benben.qcloud.benLive.R.id.back) {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
