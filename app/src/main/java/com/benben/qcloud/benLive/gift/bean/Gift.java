@@ -1,4 +1,4 @@
-package com.benben.qcloud.benLive.gift;
+package com.benben.qcloud.benLive.gift.bean;
 
 public class Gift {
     private Integer id;

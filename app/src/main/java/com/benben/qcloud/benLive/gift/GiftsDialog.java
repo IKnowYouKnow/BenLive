@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.gift.bean.Gift;
 
 import java.util.ArrayList;
 
