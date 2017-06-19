@@ -14,9 +14,9 @@ public class LiveDBOpenHelper extends SQLiteOpenHelper {
 
     private static final String GIFT_TABLE_CREATE = "create table" +
             LiveDao.GIFT_TAB_NAME + "(" +
-            LiveDao.GIFT_COLUMN_NAME + " text" +
-            LiveDao.GIFT_COLUMN_URL + " text" +
-            LiveDao.GIFT_COLUMN_PRICE + " integer" +
+            LiveDao.GIFT_COLUMN_NAME + " text," +
+            LiveDao.GIFT_COLUMN_URL + " text," +
+            LiveDao.GIFT_COLUMN_PRICE + " integer," +
             LiveDao.GIFT_COLUMN_ID + " integer primary key)";
 
     public LiveDBOpenHelper(Context context) {
