@@ -8,9 +8,9 @@
     <RelativeLayout
         android:id="@+id/toppanel1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/shape_title"
+        android:background="@color/tencent_tls_ui_titleBackground"
         android:gravity="center_vertical">
 
 
@@ -20,7 +20,7 @@
             android:layout_centerInParent="true"
             android:text="@string/text_live_preview"
             android:textColor="@color/colorTextWhite"
-            android:textSize="@dimen/h10" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/btn_cancel"
@@ -196,25 +196,25 @@
 
 
 
-        <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/colorGray2" />-->
+        <!--<TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGray2" />
 
-        <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:text="@string/text_record_info" />-->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="@string/text_record_info" />-->
     </LinearLayout>
 
     <TextView
         android:id="@+id/btn_publish"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="150dp"
-        android:background="@color/tencent_tls_ui_titleBackground"
+        android:background="@color/btn_red_hover"
         android:gravity="center"
         android:onClick="onClick"
         android:text="@string/text_publish"

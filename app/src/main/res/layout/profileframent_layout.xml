@@ -18,6 +18,11 @@
             android:textSize="20sp"
             android:textColor="#fff"
             />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line"
+            />
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
@@ -161,7 +166,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:background="@color/btn_red"
         android:gravity="center"
         android:text="@string/str_exit"
