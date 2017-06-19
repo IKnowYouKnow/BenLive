@@ -87,7 +87,7 @@ public interface LiveService {
     );
 
     /** 加载用户数据 */
-    @GET("findUserByUserName")
+    @GET("personal_show")
     Call<String> loadUserInfo(@Query(I.User.USER_NAME) String username);
 
     /** 注册用户 */
