@@ -1041,7 +1041,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         }
     }
 
-
     @Override
     public void refreshText(String text, String name) {
         if (text != null) {
@@ -2075,8 +2074,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     // 发送礼物
     private void sendGift(int giftId) {
-        if (giftId < 0)
+
+        if (giftId < 0) {
             return;
+        }
         TIMMessage Nmsg = new TIMMessage();
         TIMTextElem elem = new TIMTextElem();
         elem.setText("送了一个礼物" + giftId);
@@ -2090,23 +2091,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onSuccess(TIMMessage data) {
                 //发送成回显示消息内容
-                showLeftGiftView(data);
-//                for (int j = 0; j < data.getElementCount(); j++) {
-//                    TIMElem elem = (TIMElem) data.getElement(0);
-//                    TIMTextElem textElem = (TIMTextElem) elem;
-//                    if (data.isSelf()) {
-//                        refreshText(textElem.getText(), MySelfInfo.getInstance().getNickName());
-//                    } else {
-//                        TIMUserProfile sendUser = data.getSenderProfile();
-//                        String name;
-//                        if (sendUser != null) {
-//                            name = sendUser.getNickName();
-//                        } else {
-//                            name = data.getSender();
-//                        }
-//                        refreshText(textElem.getText(), name);
-//                    }
-//                }
+//                showLeftGiftView(data);
                 SxbLog.d(TAG, "sendGroupMessage->success");
             }
 
