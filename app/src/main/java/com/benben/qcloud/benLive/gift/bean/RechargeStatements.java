@@ -1,5 +1,8 @@
 package com.benben.qcloud.benLive.gift.bean;
 
+/**
+ * 充值流水
+ */
 public class RechargeStatements {
     private Integer id;
 

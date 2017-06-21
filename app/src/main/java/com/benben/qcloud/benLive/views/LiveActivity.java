@@ -72,6 +72,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.tencent.TIMElem;
 import com.tencent.TIMMessage;
 import com.tencent.TIMTextElem;
 import com.tencent.TIMUserProfile;
@@ -1307,9 +1308,9 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             case R.id.vmember_send_good:
                 mHeartLayout.addFavor();
 //                if (checkInterval()) {
-                    mLiveHelper.sendGroupCmd(Constants.AVIMCMD_PRAISE, "");
-                    CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
-                    tvAdmires.setText("" + CurLiveInfo.getAdmires());
+                mLiveHelper.sendGroupCmd(Constants.AVIMCMD_PRAISE, "");
+                CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
+                tvAdmires.setText("" + CurLiveInfo.getAdmires());
 //                }
                 break;
             // 点击显示礼物列表
@@ -2075,13 +2076,12 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     // 发送礼物
     private void sendGift(int giftId) {
-
         if (giftId < 0) {
             return;
         }
         TIMMessage Nmsg = new TIMMessage();
         TIMTextElem elem = new TIMTextElem();
-        elem.setText("送了一个礼物" + giftId);
+        elem.setText("送了你一个" + giftId);
         if (Nmsg.addElement(elem) != 0) {
             return;
         }
@@ -2092,7 +2092,24 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onSuccess(TIMMessage data) {
                 //发送成回显示消息内容
-                showLeftGiftView(data);
+//
+                for (int j = 0; j < data.getElementCount(); j++) {
+                    TIMElem elem = (TIMElem) data.getElement(0);
+                    TIMTextElem textElem = (TIMTextElem) elem;
+                    if (data.isSelf()) {
+                        showLeftGiftView(data);
+                    } else {
+                        TIMUserProfile sendUser = data.getSenderProfile();
+                        String name;
+                        if (sendUser != null) {
+                            name = sendUser.getNickName();
+                        } else {
+                            name = data.getSender();
+                        }
+                        data.setSender(name);
+                        showLeftGiftView(data);
+                    }
+                }
             }
 
             @Override
@@ -2109,7 +2126,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             String name = message.getSender();
             int giftId = message.getCustomInt();
             String nick = message.getCustomStr();
-            Log.e(TAG,"showLeftGiftView,name="+name+",giftid="+giftId+",nick="+nick);
+            Log.e(TAG, "showLeftGiftView,name=" + name + ",giftid=" + giftId + ",nick=" + nick);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2125,7 +2142,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private void showGift1Direct(final TIMMessage message) {
         isGiftShowing = true;
         animateGiftView(message, leftGiftView1, new AnimationListener.Stop() {
-            @Override public void onStop() {
+            @Override
+            public void onStop() {
                 TIMMessage pollName = null;
                 try {
                     pollName = toShowList.remove(0);
@@ -2144,7 +2162,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     private void showGift2Direct(final TIMMessage message) {
         isGift2Showing = true;
         animateGiftView(message, leftGiftView2, new AnimationListener.Stop() {
-            @Override public void onStop() {
+            @Override
+            public void onStop() {
                 TIMMessage pollName = null;
                 try {
                     pollName = toShowList.remove(0);
@@ -2162,7 +2181,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private void animateGiftView(final TIMMessage message, final LiveLeftGiftView giftView, final AnimationListener.Stop animationStop) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 int giftId = 0;
                 String nick = message.getSender();
                 try {

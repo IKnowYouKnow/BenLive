@@ -1,5 +1,8 @@
 package com.benben.qcloud.benLive.gift.bean;
 
+/**
+ * 主播收到的礼物的数量，日期，礼物ID等
+ */
 public class GiftStatements {
     private Integer id;
 

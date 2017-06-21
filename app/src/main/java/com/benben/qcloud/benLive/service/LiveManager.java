@@ -3,27 +3,28 @@ package com.benben.qcloud.benLive.service;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.benben.qcloud.benLive.I;
 import com.benben.qcloud.benLive.QavsdkApplication;
 import com.benben.qcloud.benLive.bean.Result;
 import com.benben.qcloud.benLive.bean.User;
 import com.benben.qcloud.benLive.gift.bean.Gift;
+import com.benben.qcloud.benLive.gift.bean.GiftCount;
+import com.benben.qcloud.benLive.gift.bean.RechargeStatements;
+import com.benben.qcloud.benLive.gift.bean.Wallet;
 import com.benben.qcloud.benLive.utils.ResultUtils;
 
 import java.io.IOException;
 import java.util.List;
 
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 /**
  * Created by Administrator on 2017/6/19.
@@ -94,27 +95,27 @@ public class LiveManager {
         return liveManager;
     }
 
-    // 获取礼物列表
-    public List<Gift> getAllGifts() {
-        final Call<String> allGifts = service.getAllGifts();
-        try {
-            Result<List<Gift>> result = HandleSyncRequesttoList(allGifts, Gift.class);
-            if (result != null & result.isRetMsg()) {
-                List<Gift> gifts = result.getRetData();
-                return gifts;
-            }
-        } catch (LiveException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    /**
+     * 从服务器加载用户信息
+     *
+     * @param username 用户ID
+     * @return 用户信息
+     */
 
     public User loadUserInfoFromService(String username) {
         Call<String> call = service.loadUserInfo(username);
         Result<User> result = null;
         try {
-            result = HandleSyncRequest(call, User.class);
-        } catch (LiveException e) {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "loadUserInfoFromService: code = " + res.code()
+                        + "errorBody = " + res.errorBody().toString());
+                return null;
+            }
+            String body = res.body();
+            result = ResultUtils.getResultFromJson(body, User.class);
+//            result = HandleSyncRequest(call, User.class);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         if (result != null && result.isRetMsg()) {
@@ -124,105 +125,165 @@ public class LiveManager {
     }
 
     /**
-     * String s = "";
-     * gson.fromJson(s, new TypeToken<User>() {}.getType());
+     * 加载所有礼物
+     *
+     * @return 礼物集合
      */
-    private <T, A> T getT(Call<A> responseCall) {
-        Result<T> result = (Result<T>) HandleSyncT(responseCall);
-        Log.e(TAG, "getT: result = " + result);
-        if (result != null && result.isRetMsg()) {
-            return result.getRetData();
-        } else {
-            Toast.makeText(QavsdkApplication.getContext(), "Failed", Toast.LENGTH_SHORT).show();
-            ;
-        }
-        return null;
-    }
-
-    private <T> T HandleSyncT(Call<T> responseCall, String faild) {
+    public List<Gift> loadGiftList() {
+        Call<String> call = service.getAllGifts();
+        Result<List<Gift>> gifts;
         try {
-            Response<T> res = responseCall.execute();
+            Response<String> res = call.execute();
             if (!res.isSuccessful()) {
-                Toast.makeText(QavsdkApplication.getContext(), "isFail", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "loadGiftList: code = " + res.code()
+                        + "errorBody = " + res.errorBody().toString());
+                return null;
             }
-            T t = res.body();
-            return t;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private <T> T HandleSyncT(Call<T> responseCall) {
-        T t = null;
-        try {
-            Response<T> res = responseCall.execute();
-            if (!res.isSuccessful()) {
-                Toast.makeText(QavsdkApplication.getContext(), "fail", Toast.LENGTH_SHORT).show();
-            }
-            t = res.body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return t;
-    }
-
-    private <T> T HandleRequest(Call<String> responseCall, Class<T> clazz) {
-        T t = null;
-        try {
-            Response<String> res = responseCall.execute();
             String body = res.body();
-            Result result = ResultUtils.getResultFromJson(body, clazz);
+            gifts = ResultUtils.getListResultFromJson(body, Gift.class);
+            if (gifts != null && gifts.isRetMsg()) {
+                return gifts.getRetData();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 根据用户名获取账户余额
+     * @param username 用户名
+     * @return
+     */
+    public Wallet getBalance(String username) {
+        Result<Wallet> wallet = null;
+        Call<String> call = service.getBalance(username);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "getBalance: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+            wallet = ResultUtils.getResultFromJson(res.body(), Wallet.class);
+            if (wallet != null && wallet.isRetMsg()) {
+                return wallet.getRetData();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 用户给主播送礼物
+     * @param username 用户名
+     * @param anchor 主播ID
+     * @param giftId 礼物ID
+     * @param giftNum 礼物数量
+     * @return
+     */
+    public Wallet givingGifts(String username, String anchor, int giftId, int giftNum) {
+        Call<String> call = service.givingGifts(username, anchor, giftId, giftNum);
+        Result<Wallet> result;
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "givingGifts: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+            result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
             if (result != null && result.isRetMsg()) {
-                t = (T) result.getRetData();
+                return result.getRetData();
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 分页加载充值流水
+     * @param username 用户名
+     * @param pageId 页码
+     * @param pageSize 每页的条数
+     * @return
+     */
+    public List<RechargeStatements> getRechargeStatements(String username, int pageId, int pageSize) {
+        Result<List<RechargeStatements>> result;
+        Call<String> call = service.getRechargeStatements(username, pageId, pageSize);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "getRechargeStatements: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+            String body = res.body();
+            result = ResultUtils.getListResultFromJson(body, RequestInterceptor.class);
+            return result.getRetData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 分页获取送礼物流水
+     * @param username 用户名
+     * @param pageId 页码
+     * @param pageSize 每页显示的条数
+     * @return
+     */
+    public List<GiftCount> getGivingGiftStatements(String username, int pageId, int pageSize) {
+        Result<List<GiftCount>> result;
+        Call<String> call = service.getGivingGiftStatements(username, pageId, pageSize);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "getGivingGiftStatements: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
+            if (result != null && result.isRetMsg()) {
+                return result.getRetData();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return t;
+        return null;
     }
 
-    private <T> Result<T> HandleSyncRequest(Call<String> responseCall, Class<T> clazz) throws LiveException {
+    /**
+     * 分页获取收礼物流水
+     * @param username 用户名
+     * @param pageId 页码
+     * @param pageSize 每页显示的条数
+     * @return
+     */
+    public List<GiftCount> getReceivingGiftStatementsServlet(String username, int pageId, int pageSize) {
+        Result<List<GiftCount>> result;
+        Call<String> call = service.getReceivingGiftStatementsServlet(username, pageId, pageSize);
         try {
-            Response<String> res = responseCall.execute();
+            Response<String> res = call.execute();
             if (!res.isSuccessful()) {
-                throw new LiveException(res.code(), res.errorBody().string());
+                Log.e(TAG, "getReceivingGiftStatementsServlet: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
             }
-            String body = res.body();
-            Result result = ResultUtils.getResultFromJson(body, clazz);
-            return result;
+            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
+            if (result != null && result.isRetMsg()) {
+                return result.getRetData();
+            }
         } catch (IOException e) {
-            throw new LiveException(e.getMessage());
+            e.printStackTrace();
         }
+        return null;
     }
 
-    private <T> Result<List<T>> HandleSyncRequesttoList(Call<String> responseCall, Class<T> clazz) throws LiveException {
-        try {
-            Response<String> res = responseCall.execute();
-            if (!res.isSuccessful()) {
-                throw new LiveException(res.code(), res.errorBody().string());
-            }
-            String body = res.body();
-            Result result = ResultUtils.getListResultFromJson(body, clazz);
-            return result;
-        } catch (IOException e) {
-            throw new LiveException(e.getMessage());
-        }
-    }
-
-    private <T> Response<T> handleResponseCall(Call<T> responseCall) throws LiveException {
-        try {
-            Response<T> response = responseCall.execute();
-            if (!response.isSuccessful()) {
-                throw new LiveException(response.code(), response.errorBody().string());
-            }
-            return response;
-        } catch (IOException e) {
-            throw new LiveException(e.getMessage());
-        }
-    }
-
-    private RequestBody jsonToRequestBody(String jsonStr) {
-        return RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonStr);
-    }
 }

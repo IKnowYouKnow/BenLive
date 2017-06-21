@@ -1,5 +1,8 @@
 package com.benben.qcloud.benLive.gift.bean;
 
+/**
+ * 用户账户余额
+ */
 public class Wallet {
     private Integer id;
 
