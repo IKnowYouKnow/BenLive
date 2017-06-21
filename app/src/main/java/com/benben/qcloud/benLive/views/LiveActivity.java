@@ -1281,6 +1281,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
     }
 
+    // 飘心动画的间隔
     private boolean checkInterval() {
         if (0 == admireTime) {
             admireTime = System.currentTimeMillis();
@@ -1305,11 +1306,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             case R.id.member_send_good:
             case R.id.vmember_send_good:
                 mHeartLayout.addFavor();
-                if (checkInterval()) {
+//                if (checkInterval()) {
                     mLiveHelper.sendGroupCmd(Constants.AVIMCMD_PRAISE, "");
                     CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
                     tvAdmires.setText("" + CurLiveInfo.getAdmires());
-                }
+//                }
                 break;
             // 点击显示礼物列表
             case R.id.member_send_gift:
@@ -2091,8 +2092,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             @Override
             public void onSuccess(TIMMessage data) {
                 //发送成回显示消息内容
-//                showLeftGiftView(data);
-                SxbLog.d(TAG, "sendGroupMessage->success");
+                showLeftGiftView(data);
             }
 
             @Override
