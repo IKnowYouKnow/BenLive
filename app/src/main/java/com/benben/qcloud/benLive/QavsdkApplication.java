@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.benben.qcloud.benLive.presenters.InitBusinessHelper;
+import com.benben.qcloud.benLive.presenters.viewinface.BenLiveHelper;
 import com.benben.qcloud.benLive.utils.SxbLogImpl;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class QavsdkApplication extends Application {
 
         if (shouldInit()) {
             SxbLogImpl.init(getApplicationContext());
-
+            BenLiveHelper.getInstance().init(getApplicationContext());
             //初始化APP
             InitBusinessHelper.initApp(context);
         }

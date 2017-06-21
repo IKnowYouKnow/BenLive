@@ -6,6 +6,7 @@ import com.benben.qcloud.benLive.bean.User;
 import com.benben.qcloud.benLive.model.IUserModel;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.model.UserModel;
+import com.benben.qcloud.benLive.service.LiveManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +103,11 @@ public class BenLiveHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                // TODO 从网络加载用户信息
+                User user = LiveManager.get().loadUserInfoFromService(MySelfInfo.getInstance().getId());
+                if (user != null) {
+                    setCurrentUserNick(user.getUserNick());
+                    setCurrentUserAvatar(user.getAvatar());
+                }
             }
         }).start();
     }
