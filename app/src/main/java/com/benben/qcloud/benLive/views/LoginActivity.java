@@ -88,11 +88,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initView() {
-        setContentView(com.benben.qcloud.benLive.R.layout.activity_independent_login);
-        mBtnLogin = (TextView) findViewById(com.benben.qcloud.benLive.R.id.btn_login);
-        mUserName = (EditText) findViewById(com.benben.qcloud.benLive.R.id.username);
-        mPassWord = (EditText) findViewById(com.benben.qcloud.benLive.R.id.password);
-        mBtnRegister = (TextView) findViewById(com.benben.qcloud.benLive.R.id.registerNewUser);
+        setContentView(R.layout.activity_independent_login);
+        mBtnLogin = (TextView) findViewById(R.id.btn_login);
+        mUserName = (EditText) findViewById(R.id.username);
+        mPassWord = (EditText) findViewById(R.id.password);
+        mBtnRegister = (TextView) findViewById(R.id.registerNewUser);
         mBtnRegister.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
     }
