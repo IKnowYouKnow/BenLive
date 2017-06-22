@@ -24,21 +24,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.ProfileInfoHelper;
 import com.benben.qcloud.benLive.presenters.UploadHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
+import com.benben.qcloud.benLive.presenters.viewinface.UploadView;
 import com.benben.qcloud.benLive.utils.Constants;
+import com.benben.qcloud.benLive.utils.GlideCircleTransform;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.utils.UIUtils;
+import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 import com.benben.qcloud.benLive.views.customviews.LineControllerView;
 import com.benben.qcloud.benLive.views.customviews.TemplateTitle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMUserProfile;
-import com.benben.qcloud.benLive.presenters.viewinface.UploadView;
-import com.benben.qcloud.benLive.utils.GlideCircleTransform;
-import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -187,9 +188,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     /**
      * 图片选择对话框
      */
-    private void showPhotoDialog() {
-        final Dialog pickDialog = new Dialog(this, com.benben.qcloud.benLive.R.style.floag_dialog);
-        pickDialog.setContentView(com.benben.qcloud.benLive.R.layout.pic_choose);
+    public void showPhotoDialog() {
+        final Dialog pickDialog = new Dialog(this, R.style.floag_dialog);
+        pickDialog.setContentView(R.layout.pic_choose);
 
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
@@ -200,9 +201,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         pickDialog.getWindow().setAttributes(lp);
 
-        TextView camera = (TextView) pickDialog.findViewById(com.benben.qcloud.benLive.R.id.chos_camera);
-        TextView picLib = (TextView) pickDialog.findViewById(com.benben.qcloud.benLive.R.id.pic_lib);
-        TextView cancel = (TextView) pickDialog.findViewById(com.benben.qcloud.benLive.R.id.btn_cancel);
+        TextView camera = (TextView) pickDialog.findViewById(R.id.chos_camera);
+        TextView picLib = (TextView) pickDialog.findViewById(R.id.pic_lib);
+        TextView cancel = (TextView) pickDialog.findViewById(R.id.btn_cancel);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,14 +232,14 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == com.benben.qcloud.benLive.R.id.rl_ep_icon) {
+        if (i == R.id.rl_ep_icon) {
             showPhotoDialog();
 
-        } else if (i == com.benben.qcloud.benLive.R.id.lcv_ep_nickname) {
-            EditActivity.navToEdit(this, getString(com.benben.qcloud.benLive.R.string.profile_nickname), MySelfInfo.getInstance().getNickName(), REQ_EDIT_NICKNAME);
+        } else if (i == R.id.lcv_ep_nickname) {
+            EditActivity.navToEdit(this, getString(R.string.profile_nickname), MySelfInfo.getInstance().getNickName(), REQ_EDIT_NICKNAME);
 
-        } else if (i == com.benben.qcloud.benLive.R.id.lcv_ep_sign) {
-            EditActivity.navToEdit(this, getString(com.benben.qcloud.benLive.R.string.profile_sign), MySelfInfo.getInstance().getSign(), REQ_EDIT_SIGN);
+        } else if (i == R.id.lcv_ep_sign) {
+            EditActivity.navToEdit(this, getString(R.string.profile_sign), MySelfInfo.getInstance().getSign(), REQ_EDIT_SIGN);
 
         } else {
         }

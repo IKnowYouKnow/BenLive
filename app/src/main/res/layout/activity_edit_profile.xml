@@ -17,6 +17,7 @@
         android:onClick="onClick"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:background="@color/colorTextWhite"
         android:layout_height="65dp" >
         <TextView
             android:text="@string/profile_icon"

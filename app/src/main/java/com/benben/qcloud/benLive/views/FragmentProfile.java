@@ -91,6 +91,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         myWallet = (LineControllerView) view.findViewById(R.id.lcv_my_wallet);
         myWallet.setOnClickListener(this);
 
+        // 设置头像的点击事件
+        mAvatar.setOnClickListener(this);
         csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
         lcvLog = (LineControllerView) view.findViewById(R.id.lcv_set_log_level);
         lcvBeauty = (LineControllerView) view.findViewById(R.id.lcv_beauty_type);
@@ -149,6 +151,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.profile_avatar:
+                EditProfileActivity edit = new EditProfileActivity();
+                edit.showPhotoDialog();
+                break;
             case R.id.edit_profile:
                 enterEditProfile();
                 break;
