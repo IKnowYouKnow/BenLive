@@ -19,16 +19,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.ProfileInfoHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LogoutView;
 import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
 import com.benben.qcloud.benLive.utils.Constants;
+import com.benben.qcloud.benLive.utils.GlideCircleTransform;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.utils.UIUtils;
+import com.benben.qcloud.benLive.views.customviews.CustomSwitch;
 import com.benben.qcloud.benLive.views.customviews.LineControllerView;
 import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
 import com.benben.qcloud.benLive.views.customviews.SpeedTestDialog;
+import com.benben.qcloud.benLive.views.customviews.WalletActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.tencent.TIMManager;
@@ -37,9 +42,6 @@ import com.tencent.av.sdk.AVContext;
 import com.tencent.ilivesdk.ILiveSDK;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
 import com.tencent.livesdk.ILVLiveManager;
-import com.benben.qcloud.benLive.model.MySelfInfo;
-import com.benben.qcloud.benLive.utils.GlideCircleTransform;
-import com.benben.qcloud.benLive.views.customviews.CustomSwitch;
 
 import java.util.List;
 
@@ -58,7 +60,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private LineControllerView mVersion, mSpeedTest, lcvLog, lcvBeauty, lcvQulity;
     private CustomSwitch csAnimator;
 
-
+    // 我的钱包
+    private LineControllerView myWallet;
     public FragmentProfile() {
     }
 
@@ -71,23 +74,27 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(com.benben.qcloud.benLive.R.layout.profileframent_layout, container, false);
+        View view = inflater.inflate(R.layout.profileframent_layout, container, false);
 
-        view.findViewById(com.benben.qcloud.benLive.R.id.tv_logout).setOnClickListener(this);
-        mAvatar = (ImageView) view.findViewById(com.benben.qcloud.benLive.R.id.profile_avatar);
-        mProfileName = (TextView) view.findViewById(com.benben.qcloud.benLive.R.id.profile_name);
-        mProfileId = (TextView) view.findViewById(com.benben.qcloud.benLive.R.id.profile_id);
-        mEditProfile = (ImageView) view.findViewById(com.benben.qcloud.benLive.R.id.edit_profile);
-        mSpeedTest = (LineControllerView) view.findViewById(com.benben.qcloud.benLive.R.id.profile_speed_test);
-        mVersion = (LineControllerView) view.findViewById(com.benben.qcloud.benLive.R.id.version);
+        view.findViewById(R.id.tv_logout).setOnClickListener(this);
+        mAvatar = (ImageView) view.findViewById(R.id.profile_avatar);
+        mProfileName = (TextView) view.findViewById(R.id.profile_name);
+        mProfileId = (TextView) view.findViewById(R.id.profile_id);
+        mEditProfile = (ImageView) view.findViewById(R.id.edit_profile);
+        mSpeedTest = (LineControllerView) view.findViewById(R.id.profile_speed_test);
+        mVersion = (LineControllerView) view.findViewById(R.id.version);
         mEditProfile.setOnClickListener(this);
         mVersion.setOnClickListener(this);
         mSpeedTest.setOnClickListener(this);
 
-        csAnimator = (CustomSwitch) view.findViewById(com.benben.qcloud.benLive.R.id.cs_animator);
-        lcvLog = (LineControllerView) view.findViewById(com.benben.qcloud.benLive.R.id.lcv_set_log_level);
-        lcvBeauty = (LineControllerView) view.findViewById(com.benben.qcloud.benLive.R.id.lcv_beauty_type);
-        lcvQulity = (LineControllerView) view.findViewById(com.benben.qcloud.benLive.R.id.lcv_video_qulity);
+        // 设置我的钱包点击事件
+        myWallet = (LineControllerView) view.findViewById(R.id.lcv_my_wallet);
+        myWallet.setOnClickListener(this);
+
+        csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
+        lcvLog = (LineControllerView) view.findViewById(R.id.lcv_set_log_level);
+        lcvBeauty = (LineControllerView) view.findViewById(R.id.lcv_beauty_type);
+        lcvQulity = (LineControllerView) view.findViewById(R.id.lcv_video_qulity);
         csAnimator.setOnClickListener(this);
         lcvLog.setOnClickListener(this);
         lcvBeauty.setOnClickListener(this);
@@ -97,7 +104,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         lcvBeauty.setContent(beautyTypes[MySelfInfo.getInstance().getBeautyType() & 0x1]);
 
         lcvQulity.setContent(Constants.SD_GUEST.equals(
-                MySelfInfo.getInstance().getGuestRole()) ? getString(com.benben.qcloud.benLive.R.string.str_video_sd) : getString(com.benben.qcloud.benLive.R.string.str_video_ld));
+                MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
 
         csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), false);
 
@@ -142,32 +149,37 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case com.benben.qcloud.benLive.R.id.edit_profile:
+            case R.id.edit_profile:
                 enterEditProfile();
                 break;
-            case com.benben.qcloud.benLive.R.id.cs_animator:
+            case R.id.cs_animator:
                 MySelfInfo.getInstance().setbLiveAnimator(!MySelfInfo.getInstance().isbLiveAnimator());
                 MySelfInfo.getInstance().writeToCache(getContext());
                 csAnimator.setChecked(MySelfInfo.getInstance().isbLiveAnimator(), true);
                 break;
-            case com.benben.qcloud.benLive.R.id.lcv_set_log_level:
+            case R.id.lcv_set_log_level:
                 changeLogLevel();
                 break;
-            case com.benben.qcloud.benLive.R.id.lcv_beauty_type:
+            case R.id.lcv_beauty_type:
                 changeBeautyType();
                 break;
-            case com.benben.qcloud.benLive.R.id.version:
+            case R.id.version:
                 showSDKVersion();
                 break;
-            case com.benben.qcloud.benLive.R.id.lcv_video_qulity:
+            case R.id.lcv_video_qulity:
                 showVideoQulity();
                 break;
-            case com.benben.qcloud.benLive.R.id.tv_logout:
+            case R.id.tv_logout:
                 if (null != mLoginHeloper)
                     mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
                 break;
-            case com.benben.qcloud.benLive.R.id.profile_speed_test:
+            case R.id.profile_speed_test:
                 new SpeedTestDialog(getContext()).start();
+                break;
+
+            // 点击我的钱包跳转到钱包界面
+            case R.id.lcv_my_wallet:
+                startActivity(new Intent(getContext(),WalletActivity.class));
                 break;
         }
     }
@@ -237,7 +249,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     private void changeLogLevel() {
         RadioGroupDialog voiceTypeDialog = new RadioGroupDialog(getContext(), SxbLog.getStringValues());
-        voiceTypeDialog.setTitle(com.benben.qcloud.benLive.R.string.set_log_level);
+        voiceTypeDialog.setTitle(R.string.set_log_level);
         voiceTypeDialog.setSelected(SxbLog.getLogLevel().ordinal());
         voiceTypeDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
@@ -254,7 +266,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     private void changeBeautyType() {
         RadioGroupDialog beautyTypeDialog = new RadioGroupDialog(getContext(), beautyTypes);
-        beautyTypeDialog.setTitle(com.benben.qcloud.benLive.R.string.str_beauty_type);
+        beautyTypeDialog.setTitle(R.string.str_beauty_type);
         beautyTypeDialog.setSelected(MySelfInfo.getInstance().getBeautyType());
         beautyTypeDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
             @Override
@@ -269,12 +281,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     }
 
     private void showVideoQulity() {
-        final String[] roles = new String[]{getString(com.benben.qcloud.benLive.R.string.str_video_sd), getString(com.benben.qcloud.benLive.R.string.str_video_ld)};
+        final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
         final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
 
         RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
 
-        roleDialog.setTitle(com.benben.qcloud.benLive.R.string.str_video_qulity);
+        roleDialog.setTitle(R.string.str_video_qulity);
         if (Constants.SD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())) {
             roleDialog.setSelected(0);
         } else if (Constants.LD_GUEST.equals(MySelfInfo.getInstance().getGuestRole())){
@@ -287,7 +299,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 MySelfInfo.getInstance().setGuestRole(values[position]);
                 MySelfInfo.getInstance().writeToCache(getContext());
                 lcvQulity.setContent(Constants.SD_GUEST.equals(
-                        MySelfInfo.getInstance().getGuestRole()) ? getString(com.benben.qcloud.benLive.R.string.str_video_sd) : getString(com.benben.qcloud.benLive.R.string.str_video_ld));
+                        MySelfInfo.getInstance().getGuestRole()) ? getString(R.string.str_video_sd) : getString(R.string.str_video_ld));
             }
         });
         roleDialog.show();
@@ -297,7 +309,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         mProfileName.setText(name);
         mProfileId.setText("ID:" + id);
         if (TextUtils.isEmpty(url)) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), com.benben.qcloud.benLive.R.drawable.default_avatar);
+            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_avatar);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             mAvatar.setImageBitmap(cirBitMap);
         } else {

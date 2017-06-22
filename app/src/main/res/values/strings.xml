@@ -25,7 +25,7 @@
     <string name="error_code_prefix">错误码：</string>
 
 
-   <!-- live fragment-->
+    <!-- live fragment-->
     <string name="live_unknown">未知</string>
     <string name="live_titile">最新直播</string>
     <string name="dialog_members_tips">邀请互动连线（最多可与三个成员进行互动直播）</string>
@@ -60,8 +60,8 @@
     <string name="clip_tip">地址复制到黏贴版上了</string>
 
     <!-- msgadapter -->
-    <item type="id" name="tag_first"></item>
-    <item type="id" name="tag_second"></item>
+    <item name="tag_first" type="id"></item>
+    <item name="tag_second" type="id"></item>
 
 
     <!-- profile fragment-->
