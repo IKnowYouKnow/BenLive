@@ -1,11 +1,8 @@
 package com.benben.qcloud.benLive.service;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.benben.qcloud.benLive.I;
-import com.benben.qcloud.benLive.QavsdkApplication;
 import com.benben.qcloud.benLive.bean.Result;
 import com.benben.qcloud.benLive.bean.User;
 import com.benben.qcloud.benLive.gift.bean.Gift;
@@ -37,32 +34,16 @@ public class LiveManager {
     private static final String TAG = "LiveManager";
 
     private LiveManager() {
-        try {
-            ApplicationInfo appInfo = QavsdkApplication.getInstance().getPackageManager().getApplicationInfo(
-                    QavsdkApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
-            appkey = appInfo.metaData.getString("EASEMOB_APPKEY");
-            appkey = appkey.replace("#", "/");
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException("must set the easemob appkey");
-        }
-//        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-//        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new RequestInterceptor())
 //                .addInterceptor(httpLoggingInterceptor)
                 .build();
 
-        Retrofit retrofit1 = new Retrofit.Builder()
-                .baseUrl("http://a1.easemob.com/" + appkey + "/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
-                .build();
-
-        service = retrofit1.create(LiveService.class);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(I.SERVER_ROOT)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
                 .build();
 
         service = retrofit.create(LiveService.class);

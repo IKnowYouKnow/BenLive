@@ -40,12 +40,11 @@
                 android:text="余额(金币)" />
 
             <TextView
-                android:id="@+id/money"
+                android:id="@+id/wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/h5"
                 android:layout_weight="1"
-                android:text="100.00"
                 android:textColor="@color/black"
                 android:textSize="35sp" />
         </LinearLayout>
@@ -65,11 +64,10 @@
                 android:text="可提现(元)" />
 
             <TextView
-                android:id="@+id/wallet"
+                android:id="@+id/money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/h5"
-                android:text="10.00"
                 android:textColor="@color/black"
                 android:textSize="35sp" />
 
@@ -104,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="金币兑换规则" />
+        android:text="充值提现规则" />
 
     <View
         android:layout_width="83dp"
