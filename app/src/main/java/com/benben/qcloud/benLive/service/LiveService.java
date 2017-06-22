@@ -48,7 +48,7 @@ public interface LiveService {
             @Query("rmb") int rmb
     );
 
-    /** 客户端发送的用户给主播赠送礼物的请求 */
+    /** 客户端发送的查询所有直播间的请求 */
     @GET("live/getAllChatRoom")
     Call<String> getAllChatRoom();
 

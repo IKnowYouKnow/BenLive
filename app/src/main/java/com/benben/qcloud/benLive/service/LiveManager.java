@@ -286,4 +286,106 @@ public class LiveManager {
         return null;
     }
 
+    /**
+     * 统计主播礼物信息
+     * @param anchorName 主播ID
+     * @return
+     */
+    public List<GiftCount> getGiftStatementsByAnchor(String anchorName) {
+        Result<List<GiftCount>> result;
+        Call<String> call = service.getGiftStatementsByAnchor(anchorName);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "getGiftStatementsByAnchor: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+
+            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
+            if (result != null && result.isRetMsg()) {
+                return result.getRetData();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 账户充值
+     * @param username 用户名
+     * @param rmb 充值金额
+     * @return
+     */
+    public Wallet recharge(String username, int rmb) {
+        Result<Wallet> result;
+        Call<String> call = service.recharge(username, rmb);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "recharge: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return null;
+            }
+            result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
+            if (result != null && result.isRetMsg()) {
+                return result.getRetData();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 注册
+     * @param username 用户名
+     * @param nick 昵称
+     * @param password 密码
+     * @return
+     */
+    public boolean register(String username, String nick, String password) {
+        Call<String> call = service.register(username, nick, password);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "register: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return false;
+            }
+            Result result = ResultUtils.getResultFromJson(res.body(), User.class);
+            if (result != null) {
+                return result.isRetMsg();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 取消注册
+     * @param username 用户名
+     * @return
+     */
+    public boolean unRegister(String username) {
+        Call<String> call = service.unregister(username);
+        try {
+            Response<String> res = call.execute();
+            if (!res.isSuccessful()) {
+                Log.e(TAG, "unRegister: code = " + res.code()
+                        + "error = " + res.errorBody().toString());
+                return false;
+            }
+            Result result = ResultUtils.getResultFromJson(res.body(), User.class);
+            if (result != null) {
+                return result.isRetMsg();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
+
