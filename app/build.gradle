@@ -44,7 +44,10 @@ android {
     }
     dexOptions {
         jumboMode true
-        incremental false
+        // 优化编译效率
+        incremental true
+        // 突破方法数限制
+        javaMaxHeapSize "4g"
     }
     lintOptions{
         abortOnError false
