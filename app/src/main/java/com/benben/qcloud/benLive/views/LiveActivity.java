@@ -851,7 +851,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             initPtuEnv();
             //IM初始化
             if (id_status == Constants.HOST) {//主播方式加入房间成功
-                mHostNameTv.setText(MySelfInfo.getInstance().getId());
+//                mHostNameTv.setText(MySelfInfo.getInstance().getId());
+                // 设置主播界面显示昵称
+                mHostNameTv.setText(MySelfInfo.getInstance().getNickName()==null?
+                        MySelfInfo.getInstance().getId():
+                        MySelfInfo.getInstance().getNickName());
 
                 //注册一个音频回调为变声用
                 ILiveSDK.getInstance().getAvAudioCtrl().registAudioDataCallbackWithByteBuffer(AVAudioCtrl.AudioDataSourceType.AUDIO_DATA_SOURCE_VOICEDISPOSE, new AVAudioCtrl.RegistAudioDataCompleteCallbackWithByteBuffer() {

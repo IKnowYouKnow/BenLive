@@ -89,9 +89,12 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
                     Intent intent = new Intent(HomeActivity.this, LiveActivity.class);
                     MySelfInfo.getInstance().setIdStatus(Constants.HOST);
                     MySelfInfo.getInstance().setJoinRoomWay(true);
-                    CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
-                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getId());
-                    CurLiveInfo.setHostAvator("");
+
+                    CurLiveInfo.setHostID(MySelfInfo.getInstance().getNickName()==null?
+                            MySelfInfo.getInstance().getId():MySelfInfo.getInstance().getNickName());
+                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getNickName()==null?
+                    MySelfInfo.getInstance().getId():MySelfInfo.getInstance().getNickName());
+                    CurLiveInfo.setHostAvator(MySelfInfo.getInstance().getAvatar());
                     CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
                     startActivity(intent);
                 }

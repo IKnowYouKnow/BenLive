@@ -13,7 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.adapters.LiveShowAdapter;
+import com.benben.qcloud.benLive.adapters.RoomShowAdapter;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
+import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.model.RoomInfoJson;
 import com.benben.qcloud.benLive.presenters.LiveListViewHelper;
 import com.benben.qcloud.benLive.presenters.UserServerHelper;
@@ -21,9 +25,6 @@ import com.benben.qcloud.benLive.presenters.viewinface.LiveListView;
 import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
-import com.benben.qcloud.benLive.adapters.LiveShowAdapter;
-import com.benben.qcloud.benLive.adapters.RoomShowAdapter;
-import com.benben.qcloud.benLive.model.MySelfInfo;
 
 import java.util.ArrayList;
 
@@ -48,13 +49,13 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mLiveListViewHelper = new LiveListViewHelper(this);
-        View view = inflater.inflate(com.benben.qcloud.benLive.R.layout.liveframent_layout, container, false);
-        mLiveList = (ListView) view.findViewById(com.benben.qcloud.benLive.R.id.live_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(com.benben.qcloud.benLive.R.id.swipe_refresh_layout_list);
+        View view = inflater.inflate(R.layout.liveframent_layout, container, false);
+        mLiveList = (ListView) view.findViewById(R.id.live_list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout_list);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light),getResources().getColor(android.R.color.holo_red_light));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        roomShowAdapter =new RoomShowAdapter(getActivity(), com.benben.qcloud.benLive.R.layout.item_liveshow, roomList);
+        roomShowAdapter =new RoomShowAdapter(getActivity(), R.layout.item_liveshow, roomList);
         mLiveList.setAdapter(roomShowAdapter);
         mLiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,9 +78,12 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                 }else{
                     MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
-                    CurLiveInfo.setHostID(item.getHostId());
-                    CurLiveInfo.setHostName("");
-                    CurLiveInfo.setHostAvator("");
+                    // 设置直播界面显示主播的昵称
+                    CurLiveInfo.setHostID(MySelfInfo.getInstance().getNickName());
+
+                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getNickName());
+                    // 设置直播界面显示主播的头像
+                    CurLiveInfo.setHostAvator(MySelfInfo.getInstance().getAvatar());
                     CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
                     CurLiveInfo.setMembers(item.getInfo().getMemsize()); // 添加自己
                     CurLiveInfo.setAdmires(item.getInfo().getThumbup());
@@ -138,12 +142,12 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
 
     private void checkJoinLive() {
         if (TextUtils.isEmpty(MySelfInfo.getInstance().getGuestRole())) {
-            final String[] roles = new String[]{getString(com.benben.qcloud.benLive.R.string.str_video_sd), getString(com.benben.qcloud.benLive.R.string.str_video_ld)};
+            final String[] roles = new String[]{getString(R.string.str_video_sd), getString(R.string.str_video_ld)};
             final String[] values = new String[]{Constants.SD_GUEST, Constants.LD_GUEST};
 
             RadioGroupDialog roleDialog = new RadioGroupDialog(getContext(), roles);
 
-            roleDialog.setTitle(com.benben.qcloud.benLive.R.string.str_video_qulity);
+            roleDialog.setTitle(R.string.str_video_qulity);
             roleDialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
                 @Override
                 public void onItemClick(int position) {

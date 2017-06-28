@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.model.RoomInfoJson;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.utils.UIUtils;
@@ -52,16 +53,16 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
         if (convertView != null) {
             holder = (ViewHolder)convertView.getTag();
         } else {
-            convertView = LayoutInflater.from(getContext()).inflate(com.benben.qcloud.benLive.R.layout.item_liveshow, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_liveshow, null);
 
             holder = new ViewHolder();
-            holder.ivCover = (ImageView) convertView.findViewById(com.benben.qcloud.benLive.R.id.cover);
-            holder.tvTitle = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_title);
-            holder.tvHost = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.host_name);
-            holder.tvMembers = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_members);
-            holder.tvAdmires = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.praises);
-            holder.tvLbs = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_lbs);
-            holder.ivAvatar = (ImageView) convertView.findViewById(com.benben.qcloud.benLive.R.id.avatar);
+            holder.ivCover = (ImageView) convertView.findViewById(R.id.cover);
+            holder.tvTitle = (TextView) convertView.findViewById(R.id.live_title);
+            holder.tvHost = (TextView) convertView.findViewById(R.id.host_name);
+            holder.tvMembers = (TextView) convertView.findViewById(R.id.live_members);
+            holder.tvAdmires = (TextView) convertView.findViewById(R.id.praises);
+            holder.tvLbs = (TextView) convertView.findViewById(R.id.live_lbs);
+            holder.ivAvatar = (ImageView) convertView.findViewById(R.id.avatar);
 
             convertView.setTag(holder);
         }
@@ -73,17 +74,18 @@ public class RoomShowAdapter extends ArrayAdapter<RoomInfoJson> {
             req.load(data.getInfo().getCover()).into(holder.ivCover); //获取网络图片
 //            holder.ivCover.setImageResource(R.drawable.cover_background);
         }else{
-            holder.ivCover.setImageResource(com.benben.qcloud.benLive.R.drawable.cover_background);
+            holder.ivCover.setImageResource(R.drawable.cover_background);
         }
 
+        // 从网络加载主播的头像 TODO
         if (null == data.getHostId() || TextUtils.isEmpty("")){
             // 显示默认图片
-            Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), com.benben.qcloud.benLive.R.drawable.default_avatar);
+            Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), R.drawable.default_avatar);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             holder.ivAvatar.setImageBitmap(cirBitMap);
         }else{
 //            RequestManager req = Glide.with(mActivity);
-//            req.load(data.getHost().getAvatar()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
+//            req.load(data.getInfo().getThumbup()).transform(new GlideCircleTransform(mActivity)).into(holder.ivAvatar);
         }
 
         holder.tvTitle.setText(UIUtils.getLimitString(data.getInfo().getTitle(), 10));
