@@ -1007,6 +1007,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     @Override
+    public void liveGift(String name, int id, String nick) {
+        TIMMessage message = new TIMMessage();
+        message.setSender(name);
+        message.setCustomInt(id);
+        message.setCustomStr(nick);
+        showLeftGiftView(message);
+    }
+
+    @Override
     public void onGetSignRsp(String id, String roomid, String sign) {
         SxbLog.d(TAG, "onGetSignRsp->id:" + id + ", room:" + roomid + ", sign:" + sign);
         mLiveHelper.linkRoom(id, roomid, sign);
@@ -2109,6 +2118,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         data.setSender(name);
                         showLeftGiftView(data);
                     }
+                    sendCmd(data);
                 }
             }
 
@@ -2117,6 +2127,13 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 Toast.makeText(LiveActivity.this, "send gift failed:" + module + "|" + errCode + "|" + errMsg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sendCmd(TIMMessage data) {
+        String name = data.getSender();
+        int giftId = data.getCustomInt();
+        String nick = data.getCustomStr();
+        mLiveHelper.sendGroupCmd(Constants.AVIMCMD_Gift, name + "," + giftId + "," + nick);
     }
 
     // 显示礼物动画

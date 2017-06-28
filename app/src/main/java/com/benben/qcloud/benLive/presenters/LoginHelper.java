@@ -54,6 +54,8 @@ public class LoginHelper extends Presenter {
             if (result != null) {
                 if (result.getErrorCode() == 0) {
                     MySelfInfo.getInstance().writeToCache(mContext);
+                    // 同步个人信息到本地
+                    BenLiveHelper.getInstance().syncUserInfo();
                     //登录
                     iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
                 } else {

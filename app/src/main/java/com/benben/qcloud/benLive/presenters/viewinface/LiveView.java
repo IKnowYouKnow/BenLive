@@ -52,4 +52,6 @@ public interface LiveView extends MvpView {
     void linkRoomReq(String id, String name);
 
     void linkRoomAccept(String id, String strRoomId);
+
+    void liveGift(String name, int id, String nick);
 }

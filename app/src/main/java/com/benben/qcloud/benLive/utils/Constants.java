@@ -123,4 +123,5 @@ public class Constants {
 
     public static final String SD_GUEST = "Guest";
     public static final String LD_GUEST = "Guest2";
+    public static final int AVIMCMD_Gift = 0x899;
 }

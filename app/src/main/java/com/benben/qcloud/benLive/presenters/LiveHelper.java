@@ -763,6 +763,9 @@ public class LiveHelper extends Presenter implements ILiveRoomOption.onRoomDisco
                 break;
             case Constants.AVIMCMD_HOST_BACK:
                 mLiveView.hostBack(identifier, nickname);
+            case Constants.AVIMCMD_Gift:
+                String[] strArr = param.split(",");
+                mLiveView.liveGift(strArr[0], Integer.parseInt(strArr[1]), strArr[2]);
 
             default:
                 break;
