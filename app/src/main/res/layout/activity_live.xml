@@ -8,24 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/quality_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp" />-->
 
-    <TextView
+  <!--  <TextView
         android:id="@+id/quality_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/quality_circle"
         android:layout_below="@id/quality_circle"
         android:layout_marginTop="5dp"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF" />-->
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="15dp"
@@ -40,7 +40,7 @@
             android:textSize="13sp"
             android:visibility="invisible" />
 
-    </ScrollView>
+    </ScrollView>-->
 
     <com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView
         android:id="@+id/left_gift_view1"
@@ -77,11 +77,12 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="10dp"
-            android:text=""
+            android:text="房间号："
             android:textColor="@color/white" />
 
 
         <LinearLayout
+            android:id="@+id/interact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
@@ -104,15 +105,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right">
-
                     <TextView
-                        android:id="@+id/param_video"
+                        android:id="@+id/link_btn"
                         style="@style/live_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:text="@string/live_btn_par" />
+                        android:text="@string/live_btn_link"
+                        android:visibility="invisible"
+                        />
 
+                    <TextView
+                        android:id="@+id/unlink_btn"
+                        style="@style/live_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/live_btn_unlink"
+                        android:visibility="invisible"/>
 
                     <TextView
                         android:id="@+id/push_btn"
@@ -122,15 +132,6 @@
                         android:layout_marginRight="10dp"
                         android:text="@string/live_btn_push"
                         android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/speed_test_btn"
-                        style="@style/live_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/ping_speed_test" />
-
 
                     <TextView
                         android:id="@+id/record_btn"
@@ -148,27 +149,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:visibility="gone"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/link_btn"
+                    android:id="@+id/param_video"
                     style="@style/live_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:text="@string/live_btn_link"
+                    android:text="@string/live_btn_par"
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/unlink_btn"
+                    android:id="@+id/speed_test_btn"
                     style="@style/live_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:text="@string/live_btn_unlink"
+                    android:text="@string/ping_speed_test"
                     android:visibility="invisible" />
             </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/horizontal_recycle_view"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/btn_back"

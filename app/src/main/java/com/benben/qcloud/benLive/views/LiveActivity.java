@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -324,8 +323,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mHostNameTv = (TextView) findViewById(R.id.host_name);
         tvMembers = (TextView) findViewById(R.id.member_counts);
         tvAdmires = (TextView) findViewById(R.id.heart_counts);
-        mQualityText = (TextView) findViewById(R.id.quality_text);
-        mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
+//        mQualityText = (TextView) findViewById(R.id.quality_text);
+//        mQualityCircle = (ImageView) findViewById(R.id.quality_circle);
 
         // 通用对话框初始化
         initVoiceTypeDialog();
@@ -411,8 +410,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         //for 测试用
         TextView paramVideo = (TextView) findViewById(R.id.param_video);
         paramVideo.setOnClickListener(this);
-        tvTipsMsg = (TextView) findViewById(R.id.qav_tips_msg);
-        tvTipsMsg.setTextColor(Color.BLACK);
+//        tvTipsMsg = (TextView) findViewById(R.id.qav_tips_msg);
+//        tvTipsMsg.setTextColor(Color.BLACK);
         paramTimer.schedule(task, 1000, 1000);
 
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
@@ -1498,7 +1497,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                         if (tvTipsMsg != null && ILiveSDK.getInstance().getAVContext() != null &&
                                 ILiveSDK.getInstance().getAVContext().getRoom() != null) {
                             //String tips =getQualityTips();
-                            String tips = "";
+                            String tips = "这是这个房间的公告信息栏";
                             ILiveQualityData qData = ILiveRoomManager.getInstance().getQualityData();
                             if (null != qData) {
                                 tips += "FPS:\t" + qData.getUpFPS() + "\n\n";
