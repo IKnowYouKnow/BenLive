@@ -8,9 +8,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 
-import com.benben.qcloud.benLive.presenters.GetMemberListHelper;
+import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.adapters.MembersAdapter;
 import com.benben.qcloud.benLive.model.MemberInfo;
+import com.benben.qcloud.benLive.presenters.GetMemberListHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
 import com.benben.qcloud.benLive.presenters.viewinface.MembersDialogView;
 
@@ -29,9 +30,9 @@ public class MembersDialog extends Dialog implements MembersDialogView {
     public MembersDialog(Context context, int theme, LiveView view) {
         super(context, theme);
         mContext = context;
-        setContentView(com.benben.qcloud.benLive.R.layout.members_layout);
-        mMemberList = (ListView) findViewById(com.benben.qcloud.benLive.R.id.member_list);
-        mMembersAdapter = new MembersAdapter(mContext, com.benben.qcloud.benLive.R.layout.members_item_layout, data, view, this);
+        setContentView(R.layout.members_layout);
+        mMemberList = (ListView) findViewById(R.id.member_list);
+        mMembersAdapter = new MembersAdapter(mContext, R.layout.members_item_layout, data, view, this);
         mMemberList.setAdapter(mMembersAdapter);
         Window window = getWindow();
         window.setGravity(Gravity.TOP);
