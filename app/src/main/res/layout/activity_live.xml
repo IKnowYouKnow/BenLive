@@ -8,24 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-   <!-- <ImageView
+
+    <ImageView
         android:id="@+id/quality_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />-->
+        android:layout_marginTop="20dp" />
 
-  <!--  <TextView
+    <TextView
         android:id="@+id/quality_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/quality_circle"
         android:layout_below="@id/quality_circle"
         android:layout_marginTop="5dp"
-        android:textColor="#FFFFFF" />-->
-
-    <!--<ScrollView
+        android:textColor="#FFFFFF" />
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="15dp"
@@ -40,7 +40,7 @@
             android:textSize="13sp"
             android:visibility="invisible" />
 
-    </ScrollView>-->
+    </ScrollView>
 
     <com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView
         android:id="@+id/left_gift_view1"

@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.model.MemberInfo;
 import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.views.customviews.MembersDialog;
-import com.benben.qcloud.benLive.model.MemberInfo;
 
 import java.util.ArrayList;
 
@@ -34,10 +35,10 @@ public class MembersAdapter extends ArrayAdapter<MemberInfo> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(com.benben.qcloud.benLive.R.layout.members_item_layout, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.members_item_layout, null);
             holder = new ViewHolder();
-            holder.id = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.item_name);
-            holder.videoCtrl = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.video_chat_ctl);
+            holder.id = (TextView) convertView.findViewById(R.id.item_name);
+            holder.videoCtrl = (TextView) convertView.findViewById(R.id.video_chat_ctl);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -46,10 +47,10 @@ public class MembersAdapter extends ArrayAdapter<MemberInfo> {
         final String selectId = data.getUserId();
         holder.id.setText(selectId);
         if (data.isOnVideoChat() == true) {
-            holder.videoCtrl.setBackgroundResource(com.benben.qcloud.benLive.R.drawable.btn_video_disconnect);
+            holder.videoCtrl.setBackgroundResource(R.drawable.btn_video_disconnect);
 
         } else {
-            holder.videoCtrl.setBackgroundResource(com.benben.qcloud.benLive.R.drawable.btn_video_connection);
+            holder.videoCtrl.setBackgroundResource(R.drawable.btn_video_connection);
 
         }
         holder.videoCtrl.setOnClickListener(new View.OnClickListener() {
@@ -60,13 +61,13 @@ public class MembersAdapter extends ArrayAdapter<MemberInfo> {
                 if (data.isOnVideoChat() == false) {//不在房间中，发起邀请
                     if (mLiveView.showInviteView(selectId)) {
 //                        data.setIsOnVideoChat(true);
-                        view.setBackgroundResource(com.benben.qcloud.benLive.R.drawable.btn_video_disconnect);
+                        view.setBackgroundResource(R.drawable.btn_video_disconnect);
 
                     }
                 } else {
                     mLiveView.cancelInviteView(selectId);
 //                    data.setIsOnVideoChat(false);
-                    view.setBackgroundResource(com.benben.qcloud.benLive.R.drawable.btn_video_connection);
+                    view.setBackgroundResource(R.drawable.btn_video_connection);
                     mLiveView.cancelMemberView(selectId);
                 }
                 membersDialog.dismiss();
