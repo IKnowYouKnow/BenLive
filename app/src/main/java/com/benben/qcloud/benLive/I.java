@@ -134,7 +134,7 @@ public interface I {
 	int MSG_ILLEGAL_REQUEST							=		-1;								//非法请求
 
 //	String SERVER_ROOT = "http://120.26.242.249:8080/SuperWeChatServerV2.0/";
-	String SERVER_ROOT = "http://zhiboapi.zikaozhuxue.net/home/user/";
+	String SERVER_ROOT = "http://192.168.0.116/app.mmhzyf.com/index.php/Info/";
 
 	/** 上传头像图片的类型：user_avatar或group_icon */
 	String AVATAR_TYPE 								= 		"avatarType";

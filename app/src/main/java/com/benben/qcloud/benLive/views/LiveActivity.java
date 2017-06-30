@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -41,12 +43,14 @@ import android.widget.Toast;
 import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.adapters.ChatMsgListAdapter;
 import com.benben.qcloud.benLive.adapters.LinkAdapter;
+import com.benben.qcloud.benLive.adapters.MembersListAdapter;
 import com.benben.qcloud.benLive.gift.GiftsDialog;
 import com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView;
 import com.benben.qcloud.benLive.model.ChatEntity;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
 import com.benben.qcloud.benLive.model.LiveInfoJson;
 import com.benben.qcloud.benLive.model.MemberID;
+import com.benben.qcloud.benLive.model.MemberInfo;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.model.RoomInfoJson;
 import com.benben.qcloud.benLive.presenters.GetLinkSignHelper;
@@ -56,7 +60,9 @@ import com.benben.qcloud.benLive.presenters.UserServerHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.GetLinkSigView;
 import com.benben.qcloud.benLive.presenters.viewinface.LiveListView;
 import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
+import com.benben.qcloud.benLive.presenters.viewinface.MembersDialogView;
 import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
+import com.benben.qcloud.benLive.service.LiveManager;
 import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.GlideCircleTransform;
 import com.benben.qcloud.benLive.utils.LogConstants;
@@ -116,7 +122,8 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 /**
  * Live直播类
  */
-public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener, ProfileView, LiveListView, GetLinkSigView {
+public class LiveActivity extends BaseActivity implements LiveView, View.OnClickListener,
+        ProfileView, LiveListView, GetLinkSigView, MembersDialogView{
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     private LiveHelper mLiveHelper;
@@ -170,6 +177,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private TILFilter mUDFilter; //美颜处理器
 
+    // 显示观众列表
+    @BindView(R.id.horizontal_recycle_view)
+    RecyclerView rvMembersList;
+
+    // 观众列表适配器
+    MembersListAdapter membersListAdapter;
+    // 观众列表集合
+    List<MemberInfo> memberInfos;
+
     // 显示礼物动画控件
     @BindView(R.id.left_gift_view1)
     LiveLeftGiftView leftGiftView1;
@@ -196,7 +212,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mLiveHelper = new LiveHelper(this, this);
         mLiveListHelper = new LiveListViewHelper(this);
         mLinkHelper = new GetLinkSignHelper(this);
-
+        showMemberList();
         initView();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
@@ -458,7 +474,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             initBackDialog();
             initDetailDailog();
 
-            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
+
             startRecordAnimation();
             showHeadIcon(mHeadIcon, MySelfInfo.getInstance().getAvatar());
         } else {
@@ -496,6 +512,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             mHostLayout = (LinearLayout) findViewById(R.id.head_up_layout);
             mHostLayout.setOnClickListener(this);
         }
+
+        mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
         BtnMic.setOnClickListener(this);
 
         BtnNormal = (TextView) findViewById(R.id.normal_btn);
@@ -513,7 +531,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         mChatMsgListAdapter = new ChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
-        tvMembers.setText("" + CurLiveInfo.getMembers());
+        tvMembers.setText(CurLiveInfo.getMembers()-1 +"" );
         tvAdmires.setText("" + CurLiveInfo.getAdmires());
 
         //TODO 获取渲染层
@@ -576,6 +594,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     protected void onPause() {
         super.onPause();
         ILiveRoomManager.getInstance().onPause();
+    }
+
+    @Override
+    public void showMembersList(ArrayList<MemberInfo> data) {
+        if (data == null) {
+            return;
+        }
+        memberInfos.clear();
+        memberInfos.addAll(data);
+        membersListAdapter.notifyDataSetChanged();
     }
 
 
@@ -969,6 +997,23 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         if (memlist != null && tvMembers != null)
             tvMembers.setText("" + memlist.size());
     }
+    private LinearLayoutManager layoutManager;
+    private void showMemberList() {
+        // 初始化观众列表
+        Log.e(TAG, "showMemberList: 开始显示了");
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        memberInfos = new ArrayList<>();
+        if (memberInfos == null) {
+            Log.e(TAG, "showMemberList: 初始化没有数据");
+        }else {
+            Log.e(TAG, "showMemberList: 数据传递过来了");
+        }
+        membersListAdapter = new MembersListAdapter(this,memberInfos);
+        rvMembersList.setAdapter(membersListAdapter);
+        rvMembersList.setLayoutManager(layoutManager);
+    }
+
 
     @Override
     public void linkRoomReq(final String id, String name) {
@@ -1328,6 +1373,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 break;
             // 点击显示礼物列表
             case R.id.member_send_gift:
+
                 GiftsDialog dialog = GiftsDialog.newInstance();
                 dialog.setListener(new View.OnClickListener() {
                     @Override
@@ -1700,14 +1746,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        tvMembers.setText("" + CurLiveInfo.getMembers());
+                        tvMembers.setText(CurLiveInfo.getMembers() - 1 + "");
                         SxbLog.w(TAG, "get nick name:" + user.getNickName());
                         SxbLog.w(TAG, "get remark name:" + user.getRemark());
                         SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());
                         if (!TextUtils.isEmpty(user.getNickName())) {
-                            refreshTextListView(user.getNickName(), "join live", Constants.MEMBER_ENTER);
+                            refreshTextListView(user.getNickName(), "来了", Constants.MEMBER_ENTER);
                         } else {
-                            refreshTextListView(user.getIdentifier(), "join live", Constants.MEMBER_ENTER);
+                            refreshTextListView(user.getIdentifier(), "来了", Constants.MEMBER_ENTER);
                         }
                     }
                     break;
@@ -2001,7 +2047,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             } else {
                 mHostNameTv.setText(UIUtils.getLimitString(CurLiveInfo.getHostID(), 10));
             }
-            tvMembers.setText("" + CurLiveInfo.getMembers());
+            tvMembers.setText(CurLiveInfo.getMembers() + "");
             tvAdmires.setText("" + CurLiveInfo.getAdmires());
 
             clearOldData();

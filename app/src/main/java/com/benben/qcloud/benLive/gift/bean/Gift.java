@@ -1,53 +1,65 @@
 package com.benben.qcloud.benLive.gift.bean;
 
+
 public class Gift {
-    private Integer id;
+    private String g_id;
 
-    private String gname;
+    private String g_name;
 
-    private String gurl;
+    private String g_thumb;
 
-    private Integer gprice;
+    private String g_price;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getGname() {
-        return gname;
-    }
-
-    public void setGname(String gname) {
-        this.gname = gname == null ? null : gname.trim();
-    }
-
-    public String getGurl() {
-        return gurl;
-    }
-
-    public void setGurl(String gurl) {
-        this.gurl = gurl == null ? null : gurl.trim();
-    }
-
-    public Integer getGprice() {
-        return gprice;
-    }
-
-    public void setGprice(Integer gprice) {
-        this.gprice = gprice;
+    public Gift(String g_id, String g_name, String g_thumb, String g_price) {
+        this.g_id = g_id;
+        this.g_name = g_name;
+        this.g_thumb = g_thumb;
+        this.g_price = g_price;
     }
 
     @Override
     public String toString() {
         return "Gift{" +
-                "id=" + id +
-                ", gname='" + gname + '\'' +
-                ", gurl='" + gurl + '\'' +
-                ", gprice=" + gprice +
+                "g_id='" + g_id + '\'' +
+                ", g_name='" + g_name + '\'' +
+                ", g_thumb='" + g_thumb + '\'' +
+                ", g_price=" + g_price +
                 '}';
     }
+
+    public String getId() {
+        return g_id;
+    }
+
+    public void setId(String g_id) {
+        this.g_id = g_id;
+    }
+
+    public String getGname() {
+        return g_name;
+    }
+
+    public void setGname(String g_name) {
+        this.g_name = g_name;
+    }
+
+    public String getGurl() {
+        return g_thumb;
+    }
+
+    public void setGurl(String g_thumb) {
+        this.g_thumb = g_thumb;
+    }
+
+    public String getGprice() {
+        return g_price;
+    }
+
+    public Gift() {
+    }
+
+    public void setGprice(String g_price) {
+        this.g_price = g_price;
+    }
+
 }

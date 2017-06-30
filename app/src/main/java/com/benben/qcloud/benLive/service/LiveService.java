@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface LiveService {
     /** 客户端发送的全部礼物信息并展示，包括礼物的名称、图片地址和价格的请求 */
-    @GET("live/getAllGifts")
+    @GET("getallgift")
     Call<String> getAllGifts();
 
     /** 客户端发送的根据用户名获取账户余额的请求 */

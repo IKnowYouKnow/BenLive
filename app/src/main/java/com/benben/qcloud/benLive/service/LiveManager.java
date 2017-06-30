@@ -20,7 +20,7 @@ import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 /**
@@ -42,7 +42,7 @@ public class LiveManager {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(I.SERVER_ROOT)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .client(httpClient)
                 .build();
 
@@ -99,7 +99,7 @@ public class LiveManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (result != null && result.isRetMsg()) {
+        if (result != null) {
             return result.getRetData();
         }
         return null;
@@ -110,7 +110,7 @@ public class LiveManager {
      *
      * @return 礼物集合
      */
-    public List<Gift> loadGiftList() {
+    public List<Gift> getGiftList() {
         Call<String> call = service.getAllGifts();
         Result<List<Gift>> gifts;
         try {
@@ -122,11 +122,14 @@ public class LiveManager {
             }
             String body = res.body();
             gifts = ResultUtils.getListResultFromJson(body, Gift.class);
-            if (gifts != null && gifts.isRetMsg()) {
+            if (gifts != null && gifts.getRetCode() == 0) {
                 return gifts.getRetData();
+            }else {
+                Log.e(TAG, "getGiftList: error = " + gifts.getRetData());
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(TAG, "getGiftList: 4" +e.getMessage().toString());
         }
         return null;
     }
@@ -147,7 +150,7 @@ public class LiveManager {
                 return null;
             }
             wallet = ResultUtils.getResultFromJson(res.body(), Wallet.class);
-            if (wallet != null && wallet.isRetMsg()) {
+            if (wallet != null) {
                 return wallet.getRetData();
             }
 
@@ -176,7 +179,7 @@ public class LiveManager {
                 return null;
             }
             result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
-            if (result != null && result.isRetMsg()) {
+            if (result != null) {
                 return result.getRetData();
             }
 
@@ -231,7 +234,7 @@ public class LiveManager {
                 return null;
             }
             result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null && result.isRetMsg()) {
+            if (result != null) {
                 return result.getRetData();
             }
         } catch (IOException e) {
@@ -258,7 +261,7 @@ public class LiveManager {
                 return null;
             }
             result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null && result.isRetMsg()) {
+            if (result != null) {
                 return result.getRetData();
             }
         } catch (IOException e) {
@@ -284,7 +287,7 @@ public class LiveManager {
             }
 
             result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null && result.isRetMsg()) {
+            if (result != null) {
                 return result.getRetData();
             }
         } catch (IOException e) {
@@ -310,7 +313,7 @@ public class LiveManager {
                 return null;
             }
             result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
-            if (result != null && result.isRetMsg()) {
+            if (result != null) {
                 return result.getRetData();
             }
         } catch (IOException e) {
@@ -336,9 +339,7 @@ public class LiveManager {
                 return false;
             }
             Result result = ResultUtils.getResultFromJson(res.body(), User.class);
-            if (result != null) {
-                return result.isRetMsg();
-            }
+            return result.getRetCode() == 0 ?true:false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -360,9 +361,7 @@ public class LiveManager {
                 return false;
             }
             Result result = ResultUtils.getResultFromJson(res.body(), User.class);
-            if (result != null) {
-                return result.isRetMsg();
-            }
+            return result.getRetCode() == 0 ?true:false;
         } catch (IOException e) {
             e.printStackTrace();
         }

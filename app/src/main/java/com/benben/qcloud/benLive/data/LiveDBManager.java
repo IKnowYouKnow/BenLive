@@ -54,15 +54,15 @@ public class LiveDBManager {
     }
 
     // 获取礼物列表
-    public synchronized Map<Integer, Gift> getGiftList() {
+    public synchronized Map<String, Gift> getGiftList() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Map<Integer, Gift> gifts = new HashMap<>();
+        Map<String, Gift> gifts = new HashMap<>();
         if (db.isOpen()) {
             Cursor cursor = db.rawQuery("select * from " + LiveDao.GIFT_TAB_NAME, null);
             while (cursor.moveToNext()) {
-                int giftId = cursor.getInt(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_ID));
+                String giftId = cursor.getString(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_ID));
                 String giftName = cursor.getString(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_NAME));
-                int giftPrice = cursor.getInt(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_PRICE));
+                String giftPrice = cursor.getString(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_PRICE));
                 String giftUrl = cursor.getString(cursor.getColumnIndex(LiveDao.GIFT_COLUMN_URL));
                 Gift gift = new Gift();
                 gift.setId(giftId);

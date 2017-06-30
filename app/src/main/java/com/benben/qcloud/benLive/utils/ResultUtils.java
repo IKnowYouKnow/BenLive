@@ -24,10 +24,10 @@ public class ResultUtils {
         Result result = new Result();
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
-            if(!jsonObject.isNull("retData")) {
-                JSONObject jsonRetData = jsonObject.getJSONObject("retData");
+            result.setRetCode(jsonObject.getInt("code"));
+//            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if(!jsonObject.isNull("data")) {
+                JSONObject jsonRetData = jsonObject.getJSONObject("data");
                 if (jsonRetData != null) {
                     Log.e("Utils", "jsonRetData=" + jsonRetData);
                     String date;
@@ -58,10 +58,10 @@ public class ResultUtils {
         Log.e("Utils","jsonStr="+jsonStr);
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);
-            result.setRetCode(jsonObject.getInt("retCode"));
-            result.setRetMsg(jsonObject.getBoolean("retMsg"));
-            if(!jsonObject.isNull("retData")) {
-                JSONArray array = jsonObject.getJSONArray("retData");
+            result.setRetCode(jsonObject.getInt("code"));
+//            result.setRetMsg(jsonObject.getBoolean("retMsg"));
+            if(!jsonObject.isNull("data")) {
+                JSONArray array = jsonObject.getJSONArray("data");
                 if (array != null) {
                     List<T> list = new ArrayList<T>();
                     for (int i = 0; i < array.length(); i++) {

@@ -22,7 +22,7 @@ public class LiveDao {
         LiveDBManager.getInstace().saveGiftList(list);
     }
 
-    public Map<Integer, Gift> getGiftList() {
+    public Map<String, Gift> getGiftList() {
         return LiveDBManager.getInstace().getGiftList();
     }
 

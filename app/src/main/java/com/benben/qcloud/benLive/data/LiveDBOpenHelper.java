@@ -16,8 +16,8 @@ public class LiveDBOpenHelper extends SQLiteOpenHelper {
             LiveDao.GIFT_TAB_NAME + "(" +
             LiveDao.GIFT_COLUMN_NAME + " text," +
             LiveDao.GIFT_COLUMN_URL + " text," +
-            LiveDao.GIFT_COLUMN_PRICE + " integer," +
-            LiveDao.GIFT_COLUMN_ID + " integer primary key)";
+            LiveDao.GIFT_COLUMN_PRICE + " text," +
+            LiveDao.GIFT_COLUMN_ID + " text primary key)";
 
     public LiveDBOpenHelper(Context context) {
         super(context, getDatabaseNames(context), null, version);

@@ -3,41 +3,37 @@ package com.benben.qcloud.benLive.bean;
 import java.io.Serializable;
 
 public class Result<T> implements Serializable {
-	private int retCode = -1;
-	private boolean retMsg;
-	private T retData;
+	private int code = -1;
+//	private boolean retMsg;
+	private T data;
 	public Result() {
 	}
-	public Result(boolean retMsg, int retCode){
-		this.retMsg = retMsg;
-		this.retCode = retCode;
-	}
-	public Result(int retCode, boolean retMsg, T retData) {
+	public Result(int retCode,/* boolean retMsg,*/ T retData) {
 		super();
-		this.retCode = retCode;
-		this.retMsg = retMsg;
-		this.retData = retData;
+		this.code = retCode;
+//		this.retMsg = retMsg;
+		this.data = retData;
 	}
 	public int getRetCode() {
-		return retCode;
+		return code;
 	}
 	public void setRetCode(int retCode) {
-		this.retCode = retCode;
+		this.code = retCode;
 	}
-	public boolean isRetMsg() {
+	/*public boolean isRetMsg() {
 		return retMsg;
 	}
 	public void setRetMsg(boolean retMsg) {
 		this.retMsg = retMsg;
-	}
+	}*/
 	public T getRetData() {
-		return retData;
+		return data;
 	}
 	public void setRetData(T retData) {
-		this.retData = retData;
+		this.data = retData;
 	}
 	@Override
 	public String toString() {
-		return "Result [retCode=" + retCode + ", retMsg=" + retMsg + ", retData=" + retData + "]";
+		return "Result [retCode=" + code /*+ ", retMsg=" + retMsg*/ + ", retData=" + data + "]";
 	}
 }

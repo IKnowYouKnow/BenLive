@@ -84,8 +84,8 @@ public class GiftsDialog extends DialogFragment {
         for (int i = 0; i < 12; i++) {
             Gift gift = new Gift();
             gift.setGname("鲜花"+i);
-            gift.setGprice(17+i);
-            gift.setId(i);
+            gift.setGprice(17+i+"");
+            gift.setId(i+"");
             giftList.add(gift);
         }
 
