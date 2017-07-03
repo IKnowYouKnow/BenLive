@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.data.LiveDao;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.ProfileInfoHelper;
@@ -46,7 +47,6 @@ import com.tencent.livesdk.ILVLiveManager;
 import java.util.List;
 
 
-
 /**
  * 视频和照片输入页面
  */
@@ -62,6 +62,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     // 我的钱包
     private LineControllerView myWallet;
+
+    LiveDao dao = new LiveDao();
     public FragmentProfile() {
     }
 

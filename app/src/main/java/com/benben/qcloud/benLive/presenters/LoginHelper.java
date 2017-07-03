@@ -3,15 +3,22 @@ package com.benben.qcloud.benLive.presenters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.data.LiveDao;
+import com.benben.qcloud.benLive.gift.bean.Gift;
+import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.viewinface.BenLiveHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
 import com.benben.qcloud.benLive.presenters.viewinface.LogoutView;
+import com.benben.qcloud.benLive.service.LiveManager;
+import com.benben.qcloud.benLive.utils.SxbLog;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.core.ILiveLoginManager;
-import com.benben.qcloud.benLive.model.MySelfInfo;
-import com.benben.qcloud.benLive.utils.SxbLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 登录的数据处理类
@@ -21,6 +28,8 @@ public class LoginHelper extends Presenter {
     private static final String TAG = LoginHelper.class.getSimpleName();
     private LoginView mLoginView;
     private LogoutView mLogoutView;
+    private List<Gift> mGiftsList;
+    LiveDao dao = new LiveDao();
 
     public LoginHelper(Context context) {
         mContext = context;
@@ -29,6 +38,7 @@ public class LoginHelper extends Presenter {
     public LoginHelper(Context context, LoginView loginView) {
         mContext = context;
         mLoginView = loginView;
+        mGiftsList = new ArrayList<>();
     }
 
     public LoginHelper(Context context, LogoutView logoutView) {
@@ -56,6 +66,18 @@ public class LoginHelper extends Presenter {
                     MySelfInfo.getInstance().writeToCache(mContext);
                     // 同步个人信息到本地
                     BenLiveHelper.getInstance().syncUserInfo();
+                    // 获取礼物信息并存到本地
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mGiftsList = LiveManager.get().getGiftList();
+                            Log.e(TAG, "run: giftList.size = "+mGiftsList.size() );
+                            dao.setGiftList(mGiftsList);
+                        }
+                    }).start();
+                    if (mGiftsList == null) {
+                        Toast.makeText(mContext, "礼物列表加载失败", Toast.LENGTH_SHORT).show();
+                    }
                     //登录
                     iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
                 } else {

@@ -1,6 +1,7 @@
 package com.benben.qcloud.benLive.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.tencent.TIMGroupManager;
 import com.tencent.TIMGroupMemberInfo;
@@ -31,15 +32,19 @@ public class GetMemberListHelper extends Presenter {
     }
 
     public void getMemberList() {
-        TIMGroupManager.getInstance().getGroupMembers("" + MySelfInfo.getInstance().getMyRoomNum(), new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
+        Log.e(TAG, "getMemberList: 开始获取信息。。。。。。。。。。。。。" );
+        TIMGroupManager.getInstance().getGroupMembers("" + MySelfInfo.getInstance().getMyRoomNum(),
+                new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
             @Override
             public void onError(int i, String s) {
                 SxbLog.i(TAG, "get MemberList ");
+                Log.e(TAG, "onError: 获取失败" +s );
             }
 
             @Override
             public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
                 SxbLog.i(TAG, "get MemberList ");
+                Log.e(TAG, "onSuccess: 获取成功" );
                 getMemberListInfo(timGroupMemberInfos);
 
             }

@@ -25,7 +25,7 @@ public class MembersDialog extends Dialog implements MembersDialogView {
     private GetMemberListHelper mGetMemberListHelper;
     private ListView mMemberList;
     private MembersAdapter mMembersAdapter;
-    private ArrayList<MemberInfo> data = new ArrayList<MemberInfo>();
+    private static ArrayList<MemberInfo> data = new ArrayList<MemberInfo>();
 
     public MembersDialog(Context context, int theme, LiveView view) {
         super(context, theme);
@@ -39,7 +39,6 @@ public class MembersDialog extends Dialog implements MembersDialogView {
         setCanceledOnTouchOutside(true);
         applyCompat();
     }
-
     @Override
     protected void onStart() {
         //获取成员信息

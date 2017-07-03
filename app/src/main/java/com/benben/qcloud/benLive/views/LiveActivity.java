@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,11 +41,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.I;
 import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.adapters.ChatMsgListAdapter;
 import com.benben.qcloud.benLive.adapters.LinkAdapter;
 import com.benben.qcloud.benLive.adapters.MembersListAdapter;
+import com.benben.qcloud.benLive.data.LiveDao;
 import com.benben.qcloud.benLive.gift.GiftsDialog;
+import com.benben.qcloud.benLive.gift.bean.Gift;
 import com.benben.qcloud.benLive.gift.widget.LiveLeftGiftView;
 import com.benben.qcloud.benLive.model.ChatEntity;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
@@ -54,6 +58,7 @@ import com.benben.qcloud.benLive.model.MemberInfo;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.model.RoomInfoJson;
 import com.benben.qcloud.benLive.presenters.GetLinkSignHelper;
+import com.benben.qcloud.benLive.presenters.GetMemberListHelper;
 import com.benben.qcloud.benLive.presenters.LiveHelper;
 import com.benben.qcloud.benLive.presenters.LiveListViewHelper;
 import com.benben.qcloud.benLive.presenters.UserServerHelper;
@@ -62,7 +67,6 @@ import com.benben.qcloud.benLive.presenters.viewinface.LiveListView;
 import com.benben.qcloud.benLive.presenters.viewinface.LiveView;
 import com.benben.qcloud.benLive.presenters.viewinface.MembersDialogView;
 import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
-import com.benben.qcloud.benLive.service.LiveManager;
 import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.GlideCircleTransform;
 import com.benben.qcloud.benLive.utils.LogConstants;
@@ -185,6 +189,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     MembersListAdapter membersListAdapter;
     // 观众列表集合
     List<MemberInfo> memberInfos;
+    GetMemberListHelper memberListHelper;
 
     // 显示礼物动画控件
     @BindView(R.id.left_gift_view1)
@@ -195,12 +200,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     // 设置标志位，显示礼物
     volatile boolean isGiftShowing = false;
     volatile boolean isGift2Showing = false;
+    LiveDao dao = new LiveDao();
 
     // 存放来不及显示的礼物
     List<TIMMessage> toShowList = Collections.synchronizedList(new LinkedList<TIMMessage>());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
@@ -209,10 +216,11 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         ButterKnife.bind(this);
         checkPermission();
 
+
         mLiveHelper = new LiveHelper(this, this);
         mLiveListHelper = new LiveListViewHelper(this);
         mLinkHelper = new GetLinkSignHelper(this);
-        showMemberList();
+        memberInfos = new ArrayList<>();
         initView();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
@@ -515,6 +523,8 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
         mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
         BtnMic.setOnClickListener(this);
+        // 显示观众列表
+        showMemberLists();
 
         BtnNormal = (TextView) findViewById(R.id.normal_btn);
         BtnNormal.setOnClickListener(this);
@@ -598,6 +608,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     @Override
     public void showMembersList(ArrayList<MemberInfo> data) {
+        Log.e(TAG, "showMembersList: data.size = "+data );
         if (data == null) {
             return;
         }
@@ -901,9 +912,14 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             } else {
                 // 更新控制栏
                 changeCtrlView(false);
+
                 //发消息通知上线
                 mLiveHelper.sendGroupCmd(Constants.AVIMCMD_ENTERLIVE, "");
             }
+            MySelfInfo.getInstance().setMyRoomNum(CurLiveInfo.getRoomNum());
+            // 获取观众列表
+            memberListHelper = new GetMemberListHelper(this, this);
+            memberListHelper.getMemberList();
         }
     }
 
@@ -978,7 +994,6 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 LogConstants.DIV + "join room " + id);
         watchCount++;
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
-
     }
 
 
@@ -998,17 +1013,15 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
             tvMembers.setText("" + memlist.size());
     }
     private LinearLayoutManager layoutManager;
-    private void showMemberList() {
+
+    private void showMemberLists() {
         // 初始化观众列表
         Log.e(TAG, "showMemberList: 开始显示了");
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(LiveActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        memberInfos = new ArrayList<>();
-        if (memberInfos == null) {
-            Log.e(TAG, "showMemberList: 初始化没有数据");
-        }else {
-            Log.e(TAG, "showMemberList: 数据传递过来了");
-        }
+        Log.e(TAG, "showMemberList: memberInfos = "+memberInfos.size() );
+        int space = 45;
+        rvMembersList.addItemDecoration(new SpaceItemDecoration(space));
         membersListAdapter = new MembersListAdapter(this,memberInfos);
         rvMembersList.setAdapter(membersListAdapter);
         rvMembersList.setLayoutManager(layoutManager);
@@ -1056,11 +1069,10 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     @Override
-    public void liveGift(String name, int id, String nick) {
+    public void liveGift(String name, String id) {
         TIMMessage message = new TIMMessage();
         message.setSender(name);
-        message.setCustomInt(id);
-        message.setCustomStr(nick);
+        message.setCustomStr(id);
         showLeftGiftView(message);
     }
 
@@ -1378,7 +1390,7 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
                 dialog.setListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int giftId = (int) v.getTag();
+                        String giftId = (String) v.getTag();
                         sendGift(giftId);
                         Toast.makeText(LiveActivity.this, "giftID = " + giftId, Toast.LENGTH_SHORT).show();
                     }
@@ -2134,19 +2146,22 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     // 发送礼物
-    private void sendGift(int giftId) {
-        if (giftId < 0) {
+    private void sendGift(String giftId) {
+        if (Integer.parseInt(giftId) < 0) {
             return;
         }
+        Map<String, Gift> giftList = dao.getGiftList();
+        Gift gift = giftList.get(giftId);
+        Log.e(TAG, "sendGift: gift = "+gift );
+
         TIMMessage Nmsg = new TIMMessage();
         TIMTextElem elem = new TIMTextElem();
-        elem.setText("送了你一个" + giftId);
+        elem.setText("送了一个" + gift.getGname());
         if (Nmsg.addElement(elem) != 0) {
             return;
         }
         Nmsg.setSender(MySelfInfo.getInstance().getId());
-        Nmsg.setCustomInt(giftId);
-        Nmsg.setCustomStr(MySelfInfo.getInstance().getNickName());
+        Nmsg.setCustomStr(giftId);
         ILiveRoomManager.getInstance().sendGroupMessage(Nmsg, new ILiveCallBack<TIMMessage>() {
             @Override
             public void onSuccess(TIMMessage data) {
@@ -2181,22 +2196,16 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
 
     private void sendCmd(TIMMessage data) {
         String name = data.getSender();
-        int giftId = data.getCustomInt();
-        String nick = data.getCustomStr();
-        mLiveHelper.sendGroupCmd(Constants.AVIMCMD_Gift, name + "," + giftId + "," + nick);
+        String giftId = data.getCustomStr();
+        mLiveHelper.sendGroupCmd(Constants.AVIMCMD_Gift, name + "," + giftId);
     }
 
     // 显示礼物动画
     protected synchronized void showLeftGiftView(TIMMessage message) {
 
-        try {
-            String name = message.getSender();
-            int giftId = message.getCustomInt();
-            String nick = message.getCustomStr();
-            Log.e(TAG, "showLeftGiftView,name=" + name + ",giftid=" + giftId + ",nick=" + nick);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String name = message.getSender();
+        String giftId = message.getCustomStr();
+        Log.e(TAG, "showLeftGiftView,name=" + name + ",giftid=" + giftId);
         if (!isGift2Showing) {
             showGift2Direct(message);
         } else if (!isGiftShowing) {
@@ -2247,21 +2256,26 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
     }
 
     private void animateGiftView(final TIMMessage message, final LiveLeftGiftView giftView, final AnimationListener.Stop animationStop) {
+        LiveDao dao = new LiveDao();
+        final Map<String, Gift> giftList = dao.getGiftList();
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                int giftId = 0;
-                String nick = message.getSender();
+                String name = message.getSender();
+                Gift gift = null;
                 try {
-                    giftId = message.getCustomInt();
-                    nick = message.getCustomStr();
+                    gift = giftList.get(message.getCustomStr());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 giftView.setVisibility(View.VISIBLE);
-                giftView.setName(nick);
+                giftView.setName(name);
                 giftView.setAvatar(message.getSender());
-//                giftView.setGift(giftId);
+                giftView.setGiftImage(I.GIFT_THUMB_URL+gift.getGurl());
+                Log.e(TAG, "run: giftThumb = "+I.GIFT_THUMB_URL+gift.getGurl());
+//                giftView.setGiftNum(count);
+                giftView.setGiftName("送了 "+gift.getGname());
                 giftView.setTranslationY(0);
                 ViewAnimator.animate(giftView)
                         .alpha(0, 1)
@@ -2282,4 +2296,18 @@ public class LiveActivity extends BaseActivity implements LiveView, View.OnClick
         });
     }
 
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration{
+        private int space;
+
+        public SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildPosition(view) != 0) {
+                outRect.top = space;
+            }
+        }
+    }
 }
