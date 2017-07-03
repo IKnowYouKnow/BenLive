@@ -1,5 +1,7 @@
 package com.benben.qcloud.benLive.data;
 
+import android.util.Log;
+
 import com.benben.qcloud.benLive.gift.bean.Gift;
 
 import java.util.List;
@@ -18,12 +20,14 @@ public class LiveDao {
 
     public LiveDao(){}
 
+    private static final String TAG = "LiveDao";
     public void setGiftList(List<Gift> list) {
-        LiveDBManager.getInstace().saveGiftList(list);
+        Log.e(TAG, "setGiftList: list.size = "+list.size() );
+        LiveDBManager.getInstance().saveGiftList(list);
     }
 
     public Map<String, Gift> getGiftList() {
-        return LiveDBManager.getInstace().getGiftList();
+        return LiveDBManager.getInstance().getGiftList();
     }
 
 

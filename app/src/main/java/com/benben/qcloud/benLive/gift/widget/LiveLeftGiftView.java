@@ -25,6 +25,10 @@ public class LiveLeftGiftView extends RelativeLayout {
     TextView name;
     @BindView(R.id.gift_image)
     ImageView giftImage;
+    @BindView(R.id.giftNum)
+    TextView giftNum;
+    @BindView(R.id.giftName)
+    TextView giftName;
 
     public LiveLeftGiftView(Context context) {
         super(context);
@@ -46,19 +50,30 @@ public class LiveLeftGiftView extends RelativeLayout {
         ButterKnife.bind(this);
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name.setText(name);
     }
 
-    public void setAvatar(String avatar){
+    public void setAvatar(String avatar) {
         Glide.with(getContext()).load(avatar).into(this.avatar);
     }
 
+    public void setGiftNum(int num) {
+        this.giftNum.setText(num + "");
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName.setText(giftName);
+    }
     public void setAvatar(int avatarID) {
         avatar.setImageResource(avatarID);
     }
 
-    public ImageView getGiftImageView(){
+    public ImageView getGiftImageView() {
         return giftImage;
+    }
+
+    public void setGiftImage(String giftImageUrl) {
+        Glide.with(getContext()).load(giftImageUrl).into(giftImage);
     }
 }

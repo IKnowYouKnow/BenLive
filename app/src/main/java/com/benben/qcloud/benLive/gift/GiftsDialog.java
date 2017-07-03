@@ -20,10 +20,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.benben.qcloud.benLive.I;
 import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.data.LiveDao;
 import com.benben.qcloud.benLive.gift.bean.Gift;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,9 +61,7 @@ public class GiftsDialog extends DialogFragment {
     TextView tvRecharge;
     private static final String TAG = "GiftHolder";
 
-    int money = 100;
-    private static String URL = "http://218.244.151.190/demo/charge";
-
+    LiveDao dao;
     public static GiftsDialog newInstance() {
         GiftsDialog dialog = new GiftsDialog();
         return dialog;
@@ -70,6 +75,8 @@ public class GiftsDialog extends DialogFragment {
         unbinder = ButterKnife.bind(this, view);
         gm = new GridLayoutManager(getContext(), 4);
 
+        dao = new LiveDao();
+        giftList = new ArrayList<>();
         rvGift.setLayoutManager(gm);
         rvGift.setHasFixedSize(true);
         customDialog();
@@ -80,24 +87,27 @@ public class GiftsDialog extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        giftList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            Gift gift = new Gift();
-            gift.setGname("鲜花"+i);
-            gift.setGprice(17+i+"");
-            gift.setId(i+"");
-            giftList.add(gift);
+        Map<String, Gift> giftMap = dao.getGiftList();
+        Iterator<Map.Entry<String, Gift>> iterator = giftMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            giftList.add(iterator.next().getValue());
         }
+        Collections.sort(giftList, new Comparator<Gift>() {
+            @Override
+            public int compare(Gift o1, Gift o2) {
+                return Integer.parseInt(o1.getGprice())-Integer.parseInt(o2.getGprice());
+            }
+        });
 
-        if (giftList.size() > 0) {
+        if (this.giftList.size() > 0) {
             if (adapter == null) {
-                adapter = new GiftAdapter(getContext(), giftList);
+                adapter = new GiftAdapter(getContext(), this.giftList);
                 rvGift.setAdapter(adapter);
             } else {
                 adapter.notifyDataSetChanged();
             }
 
-            for (Gift gift1 : giftList) {
+            for (Gift gift1 : this.giftList) {
                 Log.e(TAG, "onActivityCreated: gift1" + gift1);
             }
         }
@@ -136,10 +146,6 @@ public class GiftsDialog extends DialogFragment {
     class GiftAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Context mContext;
         ArrayList<Gift> mList;
-        int[] giftPicId = {
-                R.drawable.pl_blue, R.drawable.pl_red, R.drawable.pl_yellow, R.drawable.test_avatar1,
-                R.drawable.test_avatar2, R.drawable.test_avatar3, R.drawable.test_avatar4, R.drawable.test_avatar5,
-                R.drawable.test_avatar6, R.drawable.test_avatar7, R.drawable.test_avatar8, R.drawable.test_avatar9};
 
         public GiftAdapter(Context mContext, ArrayList<Gift> giftList) {
             this.mContext = mContext;
@@ -158,12 +164,12 @@ public class GiftsDialog extends DialogFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder parentHolder, int position) {
             Gift gift = giftList.get(position);
             GiftHolder vh = (GiftHolder) parentHolder;
-            vh.bind(gift, position);
+            vh.bind(gift);
         }
 
         @Override
         public int getItemCount() {
-            return giftList != null ? giftList.size() - 1 : 0;
+            return giftList != null ? giftList.size() : 0;
         }
 
         class GiftHolder extends RecyclerView.ViewHolder {
@@ -181,10 +187,10 @@ public class GiftsDialog extends DialogFragment {
                 ButterKnife.bind(this, view);
             }
 
-            public void bind(Gift gift, int position) {
+            public void bind(Gift gift) {
                 tvGiftName.setText(gift.getGname());
                 tvGiftPrice.setText(gift.getGprice() + "");
-                ivGiftThumb.setImageResource(giftPicId[position]);
+                Glide.with(mContext).load(I.GIFT_THUMB_URL+gift.getGurl()).into(ivGiftThumb);
                 Log.e(TAG, "bind: gift.getID = " + gift.getId());
                 itemView.setTag(gift.getId());
                 itemView.setOnClickListener(mListener);

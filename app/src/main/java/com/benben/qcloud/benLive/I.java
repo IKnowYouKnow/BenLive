@@ -235,12 +235,6 @@ public interface I {
 	/** 客户端分页加载主播收礼物流水 */
 	String REQUEST_RECEIVING_GIFT_STATEMENT		 	= 		"live/getReceivingGiftStatementsServlet";
 
+	String GIFT_THUMB_URL = "http://192.168.0.116/app.mmhzyf.com/images/gift/";
 
-	int REQUESTCODE_PICK = 1;
-	int REQUESTCODE_CUTTING = 2;
-	int REQUESTCODE_MEMBER = 3;
-	int GIFT_COLUMN_COUNT = 4;
-	String GIFT_STATEMENT_TYPE = "cn.ucai.live_gift_statement_type";
-	int GIFT_STATEMENT_TYPE_GIBVING = 0;
-	int GIFT_STATEMENT_TYPE_RECEIVING = 1;
 }

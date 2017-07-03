@@ -12,12 +12,12 @@ public class LiveDBOpenHelper extends SQLiteOpenHelper {
     private static final int version = 1;
     private static LiveDBOpenHelper instance;
 
-    private static final String GIFT_TABLE_CREATE = "create table" +
+    private static final String GIFT_TABLE_CREATE = "create table " +
             LiveDao.GIFT_TAB_NAME + "(" +
             LiveDao.GIFT_COLUMN_NAME + " text," +
             LiveDao.GIFT_COLUMN_URL + " text," +
             LiveDao.GIFT_COLUMN_PRICE + " text," +
-            LiveDao.GIFT_COLUMN_ID + " text primary key)";
+            LiveDao.GIFT_COLUMN_ID + " integer primary key)";
 
     public LiveDBOpenHelper(Context context) {
         super(context, getDatabaseNames(context), null, version);
@@ -48,8 +48,12 @@ public class LiveDBOpenHelper extends SQLiteOpenHelper {
 
     public void closeDB(){
         if (instance != null) {
-            SQLiteDatabase db = instance.getWritableDatabase();
-            db.close();
+            try {
+                SQLiteDatabase db = instance.getWritableDatabase();
+                db.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             instance = null;
         }
     }
