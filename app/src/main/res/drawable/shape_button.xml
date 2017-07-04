@@ -5,30 +5,30 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#01aef2"
-                android:endColor="#01aef2"
+                android:startColor="#fdabbb"
+                android:endColor="#fd506d"
                 android:angle="270"/>
-            <corners android:radius="60dp"/>
+            <corners android:radius="10dp"/>
         </shape>
     </item>
 
     <!-- 获取焦点 -->
     <item android:state_focused="true">
         <shape>
-            <gradient android:startColor="#01ddd2"
-                android:endColor="#01ddd2"
+            <gradient android:startColor="#fd8ba0"
+                android:endColor="#fc5471"
                 android:angle="270"/>
-            <corners android:radius="60dp"/>
+            <corners android:radius="10dp"/>
         </shape>
     </item>
 
     <!--默认 -->
     <item>
         <shape>
-            <gradient android:startColor="#01aef2"
-                android:endColor="#01aef2"
+            <gradient android:startColor="#fdaaba"
+                android:endColor="#fd506e"
                 android:angle="0"/>
-            <corners android:radius="60dp"/>
+            <corners android:radius="10dp"/>
         </shape>
     </item>
 

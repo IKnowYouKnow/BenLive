@@ -91,8 +91,6 @@ public interface LiveService {
     Call<String> loadUserInfo(@Query(I.User.USER_NAME) String username);
 
     /** 注册用户 */
-    //http://101.251.196.90:8080/SuperWeChatServerV2.0/register?
-    // m_user_name=1&m_user_nick=1&m_user_password=1
     @Multipart
     @POST("register")
     Call<String> register(

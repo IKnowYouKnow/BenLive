@@ -1,9 +1,10 @@
 package com.benben.qcloud.benLive.views.customviews;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,13 +39,21 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.my_wallet_activity);
+        initState();
         ButterKnife.bind(this);
         getUserWallet();
         setListener();
     }
 
+    private void initState(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
     /**
      * 获取用户账户信息
      */

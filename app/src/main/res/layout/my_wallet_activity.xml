@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/tencent_tls_ui_titleBackground"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.benben.qcloud.benLive.views.customviews.TemplateTitle
@@ -13,100 +16,109 @@
         app:backText="@string/btn_return"
         app:titleText="账户" />
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/wallet" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/wallet" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:background="@color/white"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="余额(金币)" />
-
-            <TextView
-                android:id="@+id/wallet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/h5"
+                android:layout_marginTop="20dp"
                 android:layout_weight="1"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="余额(金币)" />
+
+                <TextView
+                    android:id="@+id/wallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/h5"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="35sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="可提现(元)" />
+
+                <TextView
+                    android:id="@+id/money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/h5"
+                    android:textColor="@color/black"
+                    android:textSize="35sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/recharge"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/shape_button"
+            android:text="充值"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/withdraw"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/shape_button"
+            android:text="提现"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/rule"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:text="充值提现规则" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="可提现(元)" />
-
-            <TextView
-                android:id="@+id/money"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/h5"
-                android:textColor="@color/black"
-                android:textSize="35sp" />
-
-        </LinearLayout>
+        <View
+            android:layout_width="83dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/line" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/recharge"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/shape_button"
-        android:text="充值"
-        android:textSize="25sp" />
-
-    <Button
-        android:id="@+id/withdraw"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:background="@drawable/shape_button"
-        android:text="提现"
-        android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/rule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="充值提现规则" />
-
-    <View
-        android:layout_width="83dp"
-        android:layout_height="1dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/line" />
 </LinearLayout>
