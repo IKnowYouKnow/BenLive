@@ -2,15 +2,13 @@ package com.benben.qcloud.benLive;
 
 public interface I {
 
-	String BROADCAST_UPDATE_AVATAR = "cn.ucai.superwechat_broadcast_update_avatar";
-	String RESULT_UPDATE_AVATAR = "cn.ucai.superwechat_broadcast_update_avatar_result";
-	String REQUEST_CODE_IS_CHAT = "request_code_is_chat";
-
     public static interface User {
 		String TABLE_NAME							=		"t_user";
 		String USER_NAME 							= 		"user_name";					//用户账号
-		String PASSWORD 							= 		"user_pwd";				//用户密码
+		String PASSWORD 							= 		"password_data";				//用户密码
 		String NICK 								= 		"user_nickname";					//用户昵称
+		String PHONE_NUM 							= 		"phone_data";					//用户昵称
+		String INVITE_CODE 							= 		"invite_code";					//用户昵称
 	}
 	
 	public static interface Contact {
@@ -63,77 +61,8 @@ public interface I {
 		String UPDATE_TIME 							= 		"m_location_last_update_time";	//最后更新时间
 	}
 
-//	String AVATAR_PATH 								= 		"E:/test/";
-	String ISON8859_1 								= 		"iso8859-1";
 	String UTF_8 									= 		"utf-8";
-	String PAGE_ID 									= 		"page_id";						//分页的起始下标
-	String PAGE_SIZE 								= 		"page_size";					//分页的每页数量
-	int DEFAULT_DISTANCE 							= 		100; 							//查找附近的人时，默认距离为100KM
-	int ID_DEFAULT									=		0;								//ID默认值
-	int UN_READ_MSG_COUNT_DEFAULT					=		0;								//未读消息数量默认值
-	int GROUP_MAX_USERS_DEFAULT 					= 		-1;								//群组最大人数默认值
-	int GROUP_AFFILIATIONS_COUNT_DEFAULT 			= 		1;								//群组人数默认值
-	int PERMISSION_NORMAL							= 		0;								//普通用户群组权限
-	int PERMISSION_OWNER							= 		1;								//群组所有者群组权限
-	int AVATAR_TYPE_USER							=		0;								//用户头像
-	int AVATAR_TYPE_GROUP							=		1;								//群组头像
-	int GROUP_PUBLIC								=		1;								//公开群组
-	int GROUP_NO_PUBLIC								=		0;								//非公开群组
-	String AVATAR_TYPE_USER_PATH					= 		"user_avatar";					//用户头像保存目录
-	String AVATAR_TYPE_GROUP_PATH 					=		"group_icon";					//群组头像保存目录
-	String AVATAR_SUFFIX_PNG						=		".png";							//PNG图片后缀名
-	String AVATAR_SUFFIX_JPG						=		".jpg";							//JPG图片后缀名
-	String AVATAR_WIDTH								= 		"width";						//下载图片的宽度
-	String AVATAR_HEIGHT							= 		"height";						//下载图片的高度
-	int AVATAR_WIDTH_DEFAULT						= 		200;							//下载图片的宽度默认值
-	int AVATAR_HEIGHT_DEFAULT						= 		200;							//下载图片的高度默认值
-    String QUESTION                                 =       "?";                            //问号
-    String EQUAL                                    =       "=";                            //等号
-    String AND	                                    =       "&";                            //&符号
-    String MSG_PREFIX_MSG                           =       "msg_";                         //消息码前缀
-	int LOCATION_IS_SEARCH_ALLOW					=		1;								//可以被搜索到地理位置
-	int LOCATION_IS_SEARCH_INHIBIT					=		0;								//禁止被搜索到地理位置
-	int MSG_SUCCESS						            =  		0;							    //默认成功
-	int MSG_REGISTER_USERNAME_EXISTS				=		101;							//账号已经存在
-	int MSG_REGISTER_FAIL							=		102;							//注册失败
-	int MSG_UNREGISTER_FAIL							=		103;							//解除注册失败
-	int MSG_USER_SEARCH_FAIL		    			=		104;							//查找用户失败
-	int MSG_LOGIN_UNKNOW_USER						=		105;							//账户不存在
-	int MSG_LOGIN_ERROR_PASSWORD					=		106;							//账户密码错误
-	int MSG_LOGIN_SUCCESS							=		107;							//登陆成功
-	int MSG_USER_SAME_NICK							=		108;							//昵称未修改
-	int MSG_USER_UPDATE_NICK_FAIL					=		109;							//昵称修改失败
-	int MSG_USER_SAME_PASSWORD						=		110;							//昵称未修改
-	int MSG_USER_UPDATE_PASSWORD_FAIL				=		111;							//昵称修改失败
-	int MSG_LOCATION_UPLOAD_FAIL					=		112;							//用户上传地理位置失败
-	int MSG_LOCATION_UPDATE_FAIL					=		113;							//用户更新地理位置失败
-	int MSG_REGISTER_UPLOAD_AVATAR_FAIL				=		201;							//上传头像失败
-	int MSG_UPLOAD_AVATAR_FAIL						=		202;							//更新头像失败
-	int MSG_CONTACT_FIRENDED						=		301;							//已经是好友关系
-	int MSG_CONTACT_ADD_FAIL						=		302;							//好友关系添加失败
-	int MSG_CONTACT_DEL_FAIL						=		303;							//好友关系删除失败
-	int MSG_GET_CONTACT_ALL_FAIL					=		304;							//获取全部好友列表失败
-	int MSG_GET_CONTACT_PAGES_FAIL					=		305;							//分页获取好友列表失败
-	int MSG_GROUP_HXID_EXISTS						=		401;							//群组环信ID已经存在
-	int MSG_GROUP_CREATE_FAIL						=		402;							//创建群组失败
-	int MSG_GROUP_ADD_MEMBER_FAIL					=		403;							//添加群组成员失败
-	int MSG_GROUP_GET_MEMBERS_FAIL					=		404;							//获取群成员失败
-	int MSG_GROUP_UNKONW							=		405;							//群组不存在
-	int MSG_GROUP_SAME_NAME							=		406;							//有相同群组名称
-	int MSG_GROUP_UPDATE_NAME_FAIL					=		407;							//群组名称修改失败
-	int MSG_GROUP_DELETE_MEMBER_FAIL				=		408;							//删除群组成员失败
-	int MSG_GROUP_DELETE_MEMBERS_FAIL				=		409;							//删除多群组成员失败
-	int MSG_GROUP_DELETE_FAIL						=		410;							//删除群组失败
-	int MSG_GROUP_FIND_BY_GOURP_ID_FAIL				=		411;							//根据群组id查找群组失败
-	int MSG_GROUP_FIND_BY_HX_ID_FAIL				=		412;							//根据环信id查找群组失败
-	int MSG_GROUP_FIND_BY_USER_NAME_FAIL			=		413;							//查找用户名称查找查找群组失败
-	int MSG_GROUP_FIND_BY_GROUP_NAME_FAIL			=		414;							//查找群组名称查找查找群组失败
-	int MSG_PUBLIC_GROUP_FAIL						=		415;							//查找公开群失败
-	int MSG_LOCATION_GET_FAIL						=		501;							//获取附近的人失败
-	int MSG_UNKNOW									=		999;							//未知错误
-	int MSG_ILLEGAL_REQUEST							=		-1;								//非法请求
 
-//	String SERVER_ROOT = "http://120.26.242.249:8080/SuperWeChatServerV2.0/";
 	String SERVER_ROOT = "http://192.168.0.116/app.mmhzyf.com/index.php/Info/";
 
 	/** 上传头像图片的类型：user_avatar或group_icon */
@@ -235,6 +164,6 @@ public interface I {
 	/** 客户端分页加载主播收礼物流水 */
 	String REQUEST_RECEIVING_GIFT_STATEMENT		 	= 		"live/getReceivingGiftStatementsServlet";
 
-	String GIFT_THUMB_URL = "http://192.168.0.116/app.mmhzyf.com/images/gift/";
+	String GIFT_THUMB_URL = "http://192.168.0.116/app.mmhzyf.com/";
 
 }

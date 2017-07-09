@@ -2,10 +2,12 @@ package com.benben.qcloud.benLive.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.benben.qcloud.benLive.R;
@@ -105,6 +107,7 @@ public class EditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        initStatus();
         getIntent().getStringExtra("title");
         input = (EditText) findViewById(R.id.editContent);
         if (defaultString != null){
@@ -131,6 +134,14 @@ public class EditActivity extends BaseActivity {
                 cancelEdit();
             }
         });
+    }
+
+    private void initStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
     }
 
     @Override

@@ -21,33 +21,6 @@ public interface LiveService {
     @GET("live/getBalance")
     Call<String> getBalance(@Query("uname") String username);
 
-    /** 客户端发送的用户给主播赠送礼物的请求 */
-    @GET("live/givingGifts")
-    Call<String> givingGifts(
-            @Query("uname") String username,
-            @Query("anchor") String anchor,
-            @Query("giftId") int giftId,
-            @Query("giftNum") int giftNum
-    );
-    /** 客户端发送的分页加载充值流水的请求 */
-    @GET("live/getRechargeStatements")
-    Call<String> getRechargeStatements(
-            @Query("uname") String username,
-            @Query("pageId") int giftId,
-            @Query("pageSize") int giftNum
-    );
-
-    /** 客户端发送的统计主播收到礼物的次数、数量及礼物信息等的请求 */
-    @GET("live/getGiftStatementsByAnchor")
-    Call<String> getGiftStatementsByAnchor(@Query("anchor") String anchor);
-
-    /** 客户端发送的用户充值的请求 */
-    @GET("live/recharge")
-    Call<String> recharge(
-            @Query("uname") String username,
-            @Query("rmb") int rmb
-    );
-
     /** 客户端发送的查询所有直播间的请求 */
     @GET("live/getAllChatRoom")
     Call<String> getAllChatRoom();
@@ -70,22 +43,6 @@ public interface LiveService {
             @Query("chatRoomId") String chatRoomId
     );
 
-    /** 客户端分页加载送礼物流水 */
-    @GET("live/getGivingGiftStatements")
-    Call<String> getGivingGiftStatements(
-            @Query("uname") String username,
-            @Query("pageId") int giftId,
-            @Query("pageSize") int giftNum
-    );
-
-    /** 客户端分页加载主播收礼物流水 */
-    @GET("live/getReceivingGiftStatementsServlet")
-    Call<String> getReceivingGiftStatementsServlet(
-            @Query("uname") String username,
-            @Query("pageId") int giftId,
-            @Query("pageSize") int giftNum
-    );
-
     /** 加载用户数据 */
     @GET("personal_show")
     Call<String> loadUserInfo(@Query(I.User.USER_NAME) String username);
@@ -94,12 +51,31 @@ public interface LiveService {
     @Multipart
     @POST("register")
     Call<String> register(
-            @Query(I.User.USER_NAME) String username,
-            @Query(I.User.NICK) String nickname,
-            @Query(I.User.PASSWORD) String password);
+            @Query(I.User.PHONE_NUM) String username,
+            @Query(I.User.PASSWORD) String password,
+            @Query(I.User.INVITE_CODE) String inviteCode,
+            @Query("type") String inviteStatus,
+            @Query("step") String tenchRes);
 
-    /** 取消注册用户 */
-    @GET("unregister")
-    Call<String> unregister(@Query(I.User.USER_NAME) String username);
+    /** 登录 */
+    @GET("login")
+    Call<String> login(@Query(I.User.PHONE_NUM) String phoneNum,
+                       @Query(I.User.PASSWORD) String password);
+    /** 忘记密码 */
+    @GET("mod_password")
+    Call<String> forgetPwd(@Query(I.User.PHONE_NUM) String phoneNum,
+                           @Query(I.User.PASSWORD) String password);
 
+    /**
+     * 获取手机验证码
+     */
+    @GET("sendsms")
+    Call<String> sendCheckCode(@Query("mobile") String phone,
+                               @Query("code") String code);
+
+    /**
+     * 检查注册通道是否开启
+     */
+    @GET("check_invite")
+    Call<String> checkIsRegister();
 }

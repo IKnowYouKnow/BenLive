@@ -24,7 +24,7 @@
     <color name="background_gray2">#E6E6E6</color>
     <color name="background_gray3">#D4D4D4</color>
     <color name="background_gray4">#EFEFF4</color>
-    <color name="line">#DDDDDD</color>
+    <color name="line">#B4B4B4</color>
     <color name="line_btn">#BBBBBB</color>
     <color name="text_gray1">#777777</color>
     <color name="text_gray2">#767676</color>
@@ -83,7 +83,7 @@
     <!--light gray-->
     <color name="colorLightGray">#E6E6E6</color>
     <!--gray2-->
-    <color name="colorGray2">#DCDCDC</color>
+    <color name="colorGray2">#999</color>
     <!--gray3-->
     <color name="colorGray3">#C8C8C8</color>
     <!--gray4-->

@@ -5,9 +5,8 @@
     <!-- 设置圆角矩形 -->
     <corners android:radius="10dp" />
 
-    <stroke android:width="5px"
-        android:color="#c8c6c6"
+    <stroke android:width="3dp"
+        android:color="#b4b4b4"
         />
-
 
 </shape>

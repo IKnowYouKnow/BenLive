@@ -1,0 +1,178 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="26dp"
+        android:src="@drawable/fanhui" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/logo" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:background="@drawable/shape_edit"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/zhanghao" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:background="#0fff"
+                android:hint="请输入手机号"
+                android:inputType="number"
+                android:maxLength="11"
+                android:textCursorDrawable="@null"
+                android:maxLines="1"
+                android:textColor="@color/line"
+                android:textColorHint="@color/line" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mima01" />
+
+            <EditText
+                android:id="@+id/updatePwd"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:background="#0fff"
+                android:hint="输入新密码"
+                android:maxLength="11"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textCursorDrawable="@null"
+                android:textColor="@color/line"
+                android:textColorHint="@color/line" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/mima02" />
+
+            <EditText
+                android:id="@+id/repassword"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:background="#0fff"
+                android:hint="确认密码"
+                android:inputType="textPassword"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:textCursorDrawable="@null"
+                android:textColor="@color/line"
+                android:textColorHint="@color/line" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:background="@color/line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/yanzhengma" />
+
+
+            <Button
+                android:id="@+id/getCheckCode"
+                android:layout_width="110dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/shape_checkcode"
+                android:text="点击获取验证码" />
+
+            <EditText
+                android:id="@+id/checkCode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tencent_tls_ui_edittext_height"
+                android:layout_toLeftOf="@id/getCheckCode"
+                android:layout_toRightOf="@id/imageView"
+                android:background="#0fff"
+                android:textCursorDrawable="@null"
+                android:hint="请输入验证码"
+                android:maxLength="6"
+                android:singleLine="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/btn_circle"
+        android:text="提交注册"
+        android:textColor="@color/tencent_tls_ui_white"
+        android:textSize="23sp" />
+
+</LinearLayout>
+
+

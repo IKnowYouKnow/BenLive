@@ -32,8 +32,6 @@ public class LiveShowAdapter extends ArrayAdapter<LiveInfoJson> {
         TextView tvTitle;
         TextView tvHost;
         TextView tvMembers;
-        TextView tvAdmires;
-        TextView tvLbs;
         ImageView ivCover;
         ImageView ivAvatar;
     }
@@ -60,8 +58,6 @@ public class LiveShowAdapter extends ArrayAdapter<LiveInfoJson> {
             holder.tvTitle = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_title);
             holder.tvHost = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.host_name);
             holder.tvMembers = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_members);
-            holder.tvAdmires = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.praises);
-            holder.tvLbs = (TextView) convertView.findViewById(com.benben.qcloud.benLive.R.id.live_lbs);
             holder.ivAvatar = (ImageView) convertView.findViewById(com.benben.qcloud.benLive.R.id.avatar);
 
             convertView.setTag(holder);
@@ -94,12 +90,6 @@ public class LiveShowAdapter extends ArrayAdapter<LiveInfoJson> {
             holder.tvHost.setText("@" + UIUtils.getLimitString(data.getHost().getUid(), 10));
         }
         holder.tvMembers.setText(""+data.getWatchCount());
-        holder.tvAdmires.setText(""+data.getAdmireCount());
-        if (!TextUtils.isEmpty(data.getLbs().getAddress())) {
-            holder.tvLbs.setText(UIUtils.getLimitString(data.getLbs().getAddress(), 9));
-        }else{
-            holder.tvLbs.setText(getContext().getString(com.benben.qcloud.benLive.R.string.live_unknown));
-        }
 
         return convertView;
     }

@@ -6,10 +6,11 @@ import com.benben.qcloud.benLive.I;
 import com.benben.qcloud.benLive.bean.Result;
 import com.benben.qcloud.benLive.bean.User;
 import com.benben.qcloud.benLive.gift.bean.Gift;
-import com.benben.qcloud.benLive.gift.bean.GiftCount;
-import com.benben.qcloud.benLive.gift.bean.RechargeStatements;
 import com.benben.qcloud.benLive.gift.bean.Wallet;
 import com.benben.qcloud.benLive.utils.ResultUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -161,211 +162,121 @@ public class LiveManager {
     }
 
     /**
-     * 用户给主播送礼物
-     * @param username 用户名
-     * @param anchor 主播ID
-     * @param giftId 礼物ID
-     * @param giftNum 礼物数量
-     * @return
-     */
-    public Wallet givingGifts(String username, String anchor, int giftId, int giftNum) {
-        Call<String> call = service.givingGifts(username, anchor, giftId, giftNum);
-        Result<Wallet> result;
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "givingGifts: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-            result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
-            if (result != null) {
-                return result.getRetData();
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 分页加载充值流水
-     * @param username 用户名
-     * @param pageId 页码
-     * @param pageSize 每页的条数
-     * @return
-     */
-    public List<RechargeStatements> getRechargeStatements(String username, int pageId, int pageSize) {
-        Result<List<RechargeStatements>> result;
-        Call<String> call = service.getRechargeStatements(username, pageId, pageSize);
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "getRechargeStatements: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-            String body = res.body();
-            result = ResultUtils.getListResultFromJson(body, RequestInterceptor.class);
-            return result.getRetData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 分页获取送礼物流水
-     * @param username 用户名
-     * @param pageId 页码
-     * @param pageSize 每页显示的条数
-     * @return
-     */
-    public List<GiftCount> getGivingGiftStatements(String username, int pageId, int pageSize) {
-        Result<List<GiftCount>> result;
-        Call<String> call = service.getGivingGiftStatements(username, pageId, pageSize);
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "getGivingGiftStatements: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null) {
-                return result.getRetData();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 分页获取收礼物流水
-     * @param username 用户名
-     * @param pageId 页码
-     * @param pageSize 每页显示的条数
-     * @return
-     */
-    public List<GiftCount> getReceivingGiftStatementsServlet(String username, int pageId, int pageSize) {
-        Result<List<GiftCount>> result;
-        Call<String> call = service.getReceivingGiftStatementsServlet(username, pageId, pageSize);
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "getReceivingGiftStatementsServlet: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null) {
-                return result.getRetData();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 统计主播礼物信息
-     * @param anchorName 主播ID
-     * @return
-     */
-    public List<GiftCount> getGiftStatementsByAnchor(String anchorName) {
-        Result<List<GiftCount>> result;
-        Call<String> call = service.getGiftStatementsByAnchor(anchorName);
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "getGiftStatementsByAnchor: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-
-            result = ResultUtils.getListResultFromJson(res.body(), GiftCount.class);
-            if (result != null) {
-                return result.getRetData();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 账户充值
-     * @param username 用户名
-     * @param rmb 充值金额
-     * @return
-     */
-    public Wallet recharge(String username, int rmb) {
-        Result<Wallet> result;
-        Call<String> call = service.recharge(username, rmb);
-        try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "recharge: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return null;
-            }
-            result = ResultUtils.getResultFromJson(res.body(), Wallet.class);
-            if (result != null) {
-                return result.getRetData();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 注册
-     * @param username 用户名
-     * @param nick 昵称
+     * 注册账号
+     * @param username 手机号
      * @param password 密码
+     * @param invitCode 邀请码
+     * @param invitStatus 邀请码开关
+     * @param tenchRes 腾讯注册结果
      * @return
      */
-    public boolean register(String username, String nick, String password) {
-        Call<String> call = service.register(username, nick, password);
+    public Result register(String username,
+                            String password, String invitCode,
+                            String invitStatus, String tenchRes) {
+        Call<String> call = service.register(username, password, invitCode, invitStatus, tenchRes);
         try {
             Response<String> res = call.execute();
             if (!res.isSuccessful()) {
                 Log.e(TAG, "register: code = " + res.code()
                         + "error = " + res.errorBody().toString());
-                return false;
+                return null;
             }
-            Result result = ResultUtils.getResultFromJson(res.body(), User.class);
-            return result.getRetCode() == 0 ?true:false;
+            Log.e(TAG, "register: result = " + ResultUtils.getStringFromJson(res.body()));
+            return ResultUtils.getStringFromJson(res.body());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     /**
-     * 取消注册
-     * @param username 用户名
+     * 忘记密码
+     * @param phoneNum 手机号
+     * @param password 新密码
      * @return
      */
-    public boolean unRegister(String username) {
-        Call<String> call = service.unregister(username);
+    public Result forgetPwd(String phoneNum, String password) {
+        Call<String> call = service.forgetPwd(phoneNum, password);
         try {
-            Response<String> res = call.execute();
-            if (!res.isSuccessful()) {
-                Log.e(TAG, "unRegister: code = " + res.code()
-                        + "error = " + res.errorBody().toString());
-                return false;
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "forgetPwd: response.error = " + response.errorBody());
+                return null;
             }
-            Result result = ResultUtils.getResultFromJson(res.body(), User.class);
-            return result.getRetCode() == 0 ?true:false;
+            Log.e(TAG, "forgetPwd: response.body = " + response.body());
+            Result res = ResultUtils.getStringFromJson(response.body());
+            Log.e(TAG, "forgetPwd: res = " + res);
+            if (res != null) {
+                return res;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+
+        return null;
+    }
+
+    /**
+     * 发送手机验证码
+     * @param mobile 手机号
+     * @param code 随机生成的验证码
+     * @return
+     */
+    public int sendCheckCode(String mobile, String code) {
+        Call<String> call = service.sendCheckCode(mobile, code);
+        try {
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "sendCheckCode: error = " + response.errorBody());
+                return -1;
+            }
+            return Integer.parseInt(response.body());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public String login(String userId, String pwd) {
+        Call<String> call = service.login(userId, pwd);
+        try {
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "login: error = " + response.errorBody());
+                return null;
+            }
+            return response.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 检查是否需要注册
+     * @return
+     */
+    public int checkIsRegister() {
+        Call<String> call = service.checkIsRegister();
+        try {
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "checkIsRegister: error = " + response.errorBody());
+                return 2;
+            }
+
+            String body = response.body();
+            Log.e(TAG, "checkIsRegister: body = " + body);
+            JSONObject obj = new JSONObject(body);
+            int code = obj.getInt("code");
+            return code;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 2;
     }
 }
 

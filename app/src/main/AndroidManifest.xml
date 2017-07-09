@@ -35,7 +35,7 @@
     <application
         android:name=".QavsdkApplication"
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -108,7 +108,8 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".views.customviews.WalletActivity"/>
+        <activity android:name=".views.customviews.WalletActivity" />
+        <activity android:name=".views.FoundPwdActivity"></activity>
     </application>
 
 </manifest>

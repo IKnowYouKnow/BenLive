@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.tencent.qcloud.timchat.ui.EditActivity">
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/top">
 
     <com.benben.qcloud.benLive.views.customviews.TemplateTitle
         android:id="@+id/ttHead"
@@ -13,13 +14,21 @@
         android:layout_alignParentTop="true"
         app:backText="@string/btn_return"
         app:moreText="@string/btn_sure" />
-    <EditText
-        android:id="@+id/editContent"
+    <LinearLayout
+        android:layout_below="@id/ttHead"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:textCursorDrawable="@color/black"
-        android:layout_below="@id/ttHead"/>
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/editContent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:textCursorDrawable="@null"
+            android:layout_below="@id/ttHead"/>
+    </LinearLayout>
+
 </RelativeLayout>

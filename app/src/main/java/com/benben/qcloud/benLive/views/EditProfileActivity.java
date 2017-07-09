@@ -102,13 +102,20 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.benben.qcloud.benLive.R.layout.activity_edit_profile);
-
+        initStatus();
         initView();
 
         mProfileInfoHelper = new ProfileInfoHelper(this);
         mUploadHelper = new UploadHelper(this, this);
 
         bPermission = checkCropPermission();
+    }
+
+    private void initStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
 
     @Override

@@ -13,17 +13,17 @@
         android:orientation="horizontal">
         <TextView
             android:id="@+id/name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/black"
+            android:layout_marginLeft="36dp"
+            android:textColor="@color/colorGray2"
             android:textSize="18sp" />
         <LinearLayout
             android:id="@+id/contentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="45dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:textColor="@color/text_gray1" />
+                android:textColor="@color/colorGray2" />
             <ImageView
                 android:id="@+id/rightArrow"
                 android:layout_width="wrap_content"
@@ -44,11 +44,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-
     </LinearLayout>
     <View
         android:id="@+id/bottomLine"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/line" />
+        android:background="#c8c8c8" />
 </LinearLayout>

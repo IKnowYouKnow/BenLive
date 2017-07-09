@@ -7,6 +7,7 @@ import com.benben.qcloud.benLive.bean.Result;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -27,7 +28,9 @@ public class ResultUtils {
             result.setRetCode(jsonObject.getInt("code"));
 //            result.setRetMsg(jsonObject.getBoolean("retMsg"));
             if(!jsonObject.isNull("data")) {
+                Log.e("Utils", "data is not null");
                 JSONObject jsonRetData = jsonObject.getJSONObject("data");
+                Log.e("Utils", "getResultFromJson: jsonData = " + jsonRetData);
                 if (jsonRetData != null) {
                     Log.e("Utils", "jsonRetData=" + jsonRetData);
                     String date;
@@ -53,6 +56,18 @@ public class ResultUtils {
         return  null;
     }
 
+    public static Result getStringFromJson(String jsonStr) {
+        Result result = new Result();
+        try {
+            JSONObject json = new JSONObject(jsonStr);
+            result.setRetCode(json.getInt("code"));
+            result.setRetData(json.getString("data"));
+            return result;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public static <T> Result getListResultFromJson(String jsonStr, Class<T> clazz){
         Result result = new Result();
         Log.e("Utils","jsonStr="+jsonStr);

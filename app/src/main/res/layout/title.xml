@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/tencent_tls_ui_titleBackground">
+    android:background="@drawable/top">
     <TextView
         android:id="@+id/menu_return"
         android:textColor="@color/colorTextWhite"

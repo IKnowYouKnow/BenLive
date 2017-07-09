@@ -21,8 +21,6 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
 
     @BindView(R.id.ttHead)
     TemplateTitle ttHead;
-    @BindView(R.id.recharge)
-    Button recharge;
     @BindView(R.id.withdraw)
     Button withdraw;
     @BindView(R.id.rule)
@@ -90,7 +88,6 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                 finish();
             }
         });
-        recharge.setOnClickListener(this);
         withdraw.setOnClickListener(this);
         rule.setOnClickListener(this);
     }
@@ -102,9 +99,6 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.recharge:
-                Toast.makeText(this, "开始充值了", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.withdraw:
                 if (currentMoney >= 10) {
                     Toast.makeText(this, "正在提现", Toast.LENGTH_SHORT).show();

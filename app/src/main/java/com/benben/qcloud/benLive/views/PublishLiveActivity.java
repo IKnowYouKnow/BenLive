@@ -17,24 +17,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.benben.qcloud.benLive.presenters.viewinface.LocationView;
-import com.benben.qcloud.benLive.views.customviews.LineControllerView;
 import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.model.CurLiveInfo;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.LocationHelper;
 import com.benben.qcloud.benLive.presenters.UploadHelper;
+import com.benben.qcloud.benLive.presenters.viewinface.LocationView;
 import com.benben.qcloud.benLive.presenters.viewinface.UploadView;
 import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.SxbLog;
+import com.benben.qcloud.benLive.utils.SystemBarTintManager;
 import com.benben.qcloud.benLive.utils.UIUtils;
 import com.benben.qcloud.benLive.views.customviews.BaseActivity;
-import com.benben.qcloud.benLive.views.customviews.CustomSwitch;
 import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
-import com.benben.qcloud.benLive.views.customviews.SpeedTestDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,11 +50,8 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     private Dialog mPicChsDialog;
     private ImageView cover;
     private Uri fileUri, cropUri;
-    private TextView tvPicTip;
-    private TextView tvLBS;
-    private TextView tvTitle;
-    private CustomSwitch btnLBS;
-    private LineControllerView lcvRole;
+    private TextView tvTitle,roleContent;
+    RelativeLayout lcvRole;
     private static final int CAPTURE_IMAGE_CAMERA = 100;
     private static final int IMAGE_STORE = 200;
     private static final String TAG = PublishLiveActivity.class.getSimpleName();
@@ -65,27 +61,27 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
     private boolean bPermission = false;
     private int uploadPercent = 0;
 
+    private SystemBarTintManager tintManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_publish);
+        initWindow();
         mPublishLivePresenter = new UploadHelper(this, this);
         mLocationHelper = new LocationHelper(this);
         tvTitle = (TextView) findViewById(R.id.live_title);
         BtnBack = (TextView) findViewById(R.id.btn_cancel);
-        tvPicTip = (TextView) findViewById(R.id.tv_pic_tip);
         BtnPublish = (TextView) findViewById(R.id.btn_publish);
         cover = (ImageView) findViewById(R.id.cover);
-        tvLBS = (TextView) findViewById(R.id.address);
-        btnLBS = (CustomSwitch) findViewById(R.id.btn_lbs);
-        lcvRole = (LineControllerView)findViewById(R.id.lcv_role);
+        lcvRole = (RelativeLayout) findViewById(R.id.lcv_role);
+        roleContent = (TextView) findViewById(R.id.role_content);
         cover.setOnClickListener(this);
         BtnBack.setOnClickListener(this);
         BtnPublish.setOnClickListener(this);
-        btnLBS.setOnClickListener(this);
         lcvRole.setOnClickListener(this);
 
-        lcvRole.setContent(getRoleShow(CurLiveInfo.getCurRole()));
+        roleContent.setText(getRoleShow(CurLiveInfo.getCurRole()));
 
         initPhotoDialog();
         initRoleDialog();
@@ -93,6 +89,14 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
         mPublishLivePresenter.updateSig();
 
         bPermission = checkPublishPermission();
+    }
+
+    private void initWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+        }
     }
 
     @Override
@@ -125,24 +129,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
         } else if (i == R.id.cover) {
             mPicChsDialog.show();
-
-        } else if (i == R.id.btn_lbs) {
-            if (btnLBS.getChecked()) {
-                btnLBS.setChecked(false, true);
-                tvLBS.setText(R.string.text_live_close_lbs);
-            } else {
-                btnLBS.setChecked(true, true);
-                tvLBS.setText(R.string.text_live_location);
-                if (mLocationHelper.checkLocationPermission()) {
-                    if (!mLocationHelper.getMyLocation(getApplicationContext(), this)) {
-                        tvLBS.setText(getString(R.string.text_live_lbs_fail));
-                        btnLBS.setChecked(false, false);
-                    }
-                }
-            }
-
-        } else if (i == R.id.speed_test) {
-            new SpeedTestDialog(this).start();
         } else if (i == R.id.lcv_role){
             if (roleDialog != null) roleDialog.show();
         }
@@ -167,7 +153,7 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
             public void onItemClick(int position) {
                 SxbLog.d(TAG, "initRoleDialog->onClick item:"+position);
                 CurLiveInfo.setCurRole(values[position]);
-                lcvRole.setContent(getRoleShow(CurLiveInfo.getCurRole()));
+                roleContent.setText(getRoleShow(CurLiveInfo.getCurRole()));
             }
         });
     }
@@ -320,7 +306,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
                     }
                     break;
                 case CROP_CHOOSE:
-                    tvPicTip.setVisibility(View.GONE);
                     cover.setImageBitmap(null);
                     cover.setImageURI(cropUri);
                     bUploading = true;
@@ -355,20 +340,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onLocationChanged(int code, double lat1, double long1, String location) {
-        if (btnLBS.getChecked()) {
-            if (0 == code) {
-                tvLBS.setText(location);
-                CurLiveInfo.setLat1(lat1);
-                CurLiveInfo.setLong1(long1);
-                CurLiveInfo.setAddress(location);
-            } else {
-                tvLBS.setText(getString(R.string.text_live_lbs_fail));
-            }
-        } else {
-            CurLiveInfo.setLat1(0);
-            CurLiveInfo.setLong1(0);
-            CurLiveInfo.setAddress("");
-        }
     }
 
     @Override
@@ -376,12 +347,6 @@ public class PublishLiveActivity extends BaseActivity implements View.OnClickLis
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.LOCATION_PERMISSION_REQ_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (!mLocationHelper.getMyLocation(getApplicationContext(), this)) {
-                        tvLBS.setText(getString(R.string.text_live_lbs_fail));
-                        btnLBS.setChecked(false, false);
-                    }
-                }
                 break;
             case Constants.WRITE_PERMISSION_REQ_CODE:
                 for (int i=0; i<grantResults.length; i++){

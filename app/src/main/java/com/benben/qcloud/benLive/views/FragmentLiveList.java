@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benben.qcloud.benLive.R;
@@ -34,13 +36,15 @@ import java.util.ArrayList;
  */
 public class FragmentLiveList extends Fragment implements View.OnClickListener, LiveListView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "FragmentLiveList";
-    private ListView mLiveList;
+    private RecyclerView mLiveList;
 //    private ArrayList<LiveInfoJson> liveList = new ArrayList<LiveInfoJson>();
     private ArrayList<RoomInfoJson> roomList = new ArrayList<RoomInfoJson>();
     private LiveShowAdapter adapter;
     private RoomShowAdapter roomShowAdapter;
     private LiveListViewHelper mLiveListViewHelper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LinearLayoutManager manager;
+    TextView noRoom;
 
     public FragmentLiveList() {
     }
@@ -50,18 +54,23 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                              Bundle savedInstanceState) {
         mLiveListViewHelper = new LiveListViewHelper(this);
         View view = inflater.inflate(R.layout.liveframent_layout, container, false);
-        mLiveList = (ListView) view.findViewById(R.id.live_list);
+        mLiveList = (RecyclerView) view.findViewById(R.id.live_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout_list);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_green_light),
                 getResources().getColor(android.R.color.holo_orange_light),getResources().getColor(android.R.color.holo_red_light));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        roomShowAdapter =new RoomShowAdapter(getActivity(), R.layout.item_liveshow, roomList);
-        mLiveList.setAdapter(roomShowAdapter);
-        mLiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        roomShowAdapter =new RoomShowAdapter(getContext(),roomList,getActivity());
 
-                RoomInfoJson item = roomList.get(i);
+        noRoom = (TextView) view.findViewById(R.id.no_room);
+        // 设置房间显示样式
+        manager = new GridLayoutManager(getActivity(), 2);
+        mLiveList.setLayoutManager(manager);
+        mLiveList.setAdapter(roomShowAdapter);
+        roomShowAdapter.setListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) v.getTag();
+                RoomInfoJson item = roomList.get(position);
                 //如果是自己
                 if (item.getHostId().equals(MySelfInfo.getInstance().getId())) {
                     Intent intent = new Intent(getActivity(), LiveActivity.class);
@@ -79,9 +88,9 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
                     MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                     MySelfInfo.getInstance().setJoinRoomWay(false);
                     // 设置直播界面显示主播的昵称
-                    CurLiveInfo.setHostID(MySelfInfo.getInstance().getNickName());
+                    CurLiveInfo.setHostID(item.getHostId());
 
-                    CurLiveInfo.setHostName(MySelfInfo.getInstance().getNickName());
+                    CurLiveInfo.setHostName(item.getHostId());
                     // 设置直播界面显示主播的头像
                     CurLiveInfo.setHostAvator(MySelfInfo.getInstance().getAvatar());
                     CurLiveInfo.setRoomNum(item.getInfo().getRoomnum());
@@ -127,9 +136,13 @@ public class FragmentLiveList extends Fragment implements View.OnClickListener, 
         mSwipeRefreshLayout.setRefreshing(false);
         roomList.clear();
         if (null != roomlist) {
-            for (RoomInfoJson item : roomlist) {
-                roomList.add(item);
+            if (roomlist.size() > 0) {
+                noRoom.setVisibility(View.GONE);
+                for (RoomInfoJson item : roomlist) {
+                    roomList.add(item);
+                }
             }
+
         }
         roomShowAdapter.notifyDataSetChanged();
     }

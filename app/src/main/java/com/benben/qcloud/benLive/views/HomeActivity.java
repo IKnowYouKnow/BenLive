@@ -5,18 +5,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TabHost;
 
-import com.benben.qcloud.benLive.model.CurLiveInfo;
-import com.tencent.TIMUserProfile;
-import com.tencent.ilivesdk.ILiveSDK;
 import com.benben.qcloud.benLive.R;
+import com.benben.qcloud.benLive.model.CurLiveInfo;
 import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.InitBusinessHelper;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
@@ -26,54 +24,42 @@ import com.benben.qcloud.benLive.utils.Constants;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.views.customviews.BaseFragmentActivity;
 import com.benben.qcloud.benLive.views.customviews.NotifyDialog;
+import com.tencent.TIMUserProfile;
+import com.tencent.ilivesdk.ILiveSDK;
 
 import java.util.List;
 
 /**
  * 主界面
  */
-public class HomeActivity extends BaseFragmentActivity implements ProfileView {
-    private FragmentTabHost mTabHost;
-    private LayoutInflater layoutInflater;
+public class HomeActivity extends BaseFragmentActivity implements ProfileView,View.OnClickListener {
     private ProfileInfoHelper infoHelper;
     private LoginHelper mLoginHelper;
-    private final Class fragmentArray[] = {FragmentList.class, FragmentPublish.class, FragmentProfile.class};
-    private int mImageViewArray[] = {R.drawable.tab_live, R.drawable.icon_publish, R.drawable.tab_profile};
-    private String mTextviewArray[] = {"live", "publish", "profile"};
+    ImageView liveList,liveOpen,myProfile;
     private static final String TAG = HomeActivity.class.getSimpleName();
 
-
+    FrameLayout mLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_layout);
+        initState();
         SxbLog.i(TAG, "HomeActivity onStart");
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         boolean living = pref.getBoolean("living", false);
-        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        layoutInflater = LayoutInflater.from(this);
-        mTabHost.setup(this, getSupportFragmentManager(), R.id.contentPanel);
+        liveList = (ImageView) findViewById(R.id.liveList);
+        liveOpen = (ImageView) findViewById(R.id.liveOpen);
+        myProfile = (ImageView) findViewById(R.id.myProfile);
+        mLayout = (FrameLayout) findViewById(R.id.layout);
 
-        int fragmentCount = fragmentArray.length;
-        for (int i = 0; i < fragmentCount; i++) {
-            //为每一个Tab按钮设置图标、文字和内容
-            TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
-            //将Tab按钮添加进Tab选项卡中
-            mTabHost.addTab(tabSpec, fragmentArray[i], null);
-            mTabHost.getTabWidget().setDividerDrawable(null);
+        liveList.setOnClickListener(this);
+        liveOpen.setOnClickListener(this);
+        myProfile.setOnClickListener(this);
 
-        }
-        mTabHost.getTabWidget().getChildTabViewAt(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                DialogFragment newFragment = InputDialog.newInstance();
-//                newFragment.show(ft, "dialog");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contentPanel,new FragmentList()).commit();
+        liveList.setImageResource(R.drawable.shouye_select);
 
-                startActivity(new Intent(HomeActivity.this, PublishLiveActivity.class));
-
-            }
-        });
 
         // 检测是否需要获取头像
         if (TextUtils.isEmpty(MySelfInfo.getInstance().getAvatar())) {
@@ -108,7 +94,15 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
             });
         }
     }
+    private void initState(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
+        }
+    }
     @Override
     protected void onStart() {
         SxbLog.i(TAG, "HomeActivity onStart");
@@ -119,13 +113,6 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
             mLoginHelper = new LoginHelper(this);
             mLoginHelper.iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         }
-    }
-
-    private View getTabItemView(int index) {
-        View view = layoutInflater.inflate(R.layout.tab_content, null);
-        ImageView icon = (ImageView) view.findViewById(R.id.tab_icon);
-        icon.setImageResource(mImageViewArray[index]);
-        return view;
     }
 
     @Override
@@ -151,5 +138,28 @@ public class HomeActivity extends BaseFragmentActivity implements ProfileView {
 
     @Override
     public void updateUserInfo(int reqid, List<TIMUserProfile> profiles) {
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.liveList:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.contentPanel, new FragmentList())
+                .commit();
+                liveList.setImageResource(R.drawable.shouye_select);
+                myProfile.setImageResource(R.drawable.wode);
+                break;
+            case R.id.liveOpen:
+                startActivity(new Intent(HomeActivity.this,PublishLiveActivity.class));
+                break;
+            case R.id.myProfile:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.contentPanel, new FragmentProfile())
+                        .commit();
+                myProfile.setImageResource(R.drawable.wode_select);
+                liveList.setImageResource(R.drawable.shouye);
+                break;
+        }
     }
 }

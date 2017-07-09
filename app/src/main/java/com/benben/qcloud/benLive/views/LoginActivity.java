@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import com.benben.qcloud.benLive.model.MySelfInfo;
 import com.benben.qcloud.benLive.presenters.InitBusinessHelper;
 import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.viewinface.LoginView;
+import com.benben.qcloud.benLive.service.LiveManager;
 import com.benben.qcloud.benLive.utils.MD5;
 import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.views.customviews.BaseActivity;
@@ -26,11 +29,12 @@ import java.util.List;
  * 登录类
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener, LoginView {
-    TextView mBtnLogin, mBtnRegister;
+    TextView mBtnLogin, mBtnRegister, mBtnForgetPwd;
     EditText mPassWord, mUserName;
     private static final String TAG = LoginActivity.class.getSimpleName();
     private LoginHelper mLoginHeloper;
     private final int REQUEST_PHONE_PERMISSIONS = 0;
+    int code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             SxbLog.i(TAG, "LoginActivity onCreate");
             mLoginHeloper.iLiveLogin(MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         }
+        checkIsRegister();
 
         // 初始化直播模块
 /*        ILVLiveConfig liveConfig = new ILVLiveConfig();
         liveConfig.messageListener(MessageEvent.getInstance());
         ILVLiveManager.getInstance().init(liveConfig);*/
+    }
+
+    private void initState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
 
     @Override
@@ -70,30 +84,56 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.registerNewUser) {
+            code = checkIsRegister();
             Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-            startActivity(intent);
-            finish();
+            Log.e(TAG, "onClick: registerCode = " + code);
+            if (code == 1) {
+                Toast.makeText(this, "当前注册通道已关闭，请开启后再进行注册", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                intent.putExtra("inviteStatus", code);
+                startActivity(intent);
+                finish();
+            }
         }
         if (view.getId() == R.id.btn_login) {//登录账号系统TLS
             if (mUserName.getText().equals("")) {
-                Toast.makeText(LoginActivity.this, "name can not be empty!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (mPassWord.getText().equals("")) {
-                Toast.makeText(LoginActivity.this, "password can not be empty!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
             mLoginHeloper.standardLogin(mUserName.getText().toString(), MD5.getMessageDigest(mPassWord.getText().toString()));
         }
+        if (view.getId() == R.id.forgetPassword) {
+            startActivity(new Intent(LoginActivity.this, FoundPwdActivity.class));
+            finish();
+        }
+    }
+
+    private int checkIsRegister() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                code = LiveManager.get().checkIsRegister();
+                Log.e(TAG, "run: i = " + code);
+            }
+        }).start();
+        return code;
     }
 
     private void initView() {
         setContentView(R.layout.activity_independent_login);
+        initState();
         mBtnLogin = (TextView) findViewById(R.id.btn_login);
         mUserName = (EditText) findViewById(R.id.username);
         mPassWord = (EditText) findViewById(R.id.password);
         mBtnRegister = (TextView) findViewById(R.id.registerNewUser);
         mBtnRegister.setOnClickListener(this);
+        mBtnForgetPwd = (TextView) findViewById(R.id.forgetPassword);
+        mBtnForgetPwd.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
     }
 
@@ -125,13 +165,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void loginSucc() {
-        Toast.makeText(LoginActivity.this, "" + MySelfInfo.getInstance().getId() + " login ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
         jumpIntoHomeActivity();
     }
 
     @Override
-    public void loginFail(String mode,int code ,String errorinfo) {
-        Toast.makeText(LoginActivity.this, "login fail" + MySelfInfo.getInstance().getId() + " : "+errorinfo, Toast.LENGTH_SHORT).show();
+    public void loginFail(String mode, int code, String errorinfo) {
+        Toast.makeText(LoginActivity.this, "login fail" + MySelfInfo.getInstance().getId() + " : " + errorinfo, Toast.LENGTH_SHORT).show();
         initView();
     }
 
