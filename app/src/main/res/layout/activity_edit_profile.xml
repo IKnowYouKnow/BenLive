@@ -28,6 +28,11 @@
             android:onClick="onClick"
             app:name="@string/profile_id" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#c8c8c8" />
+
         <RelativeLayout
             android:id="@+id/rl_ep_icon"
             android:layout_width="match_parent"
@@ -39,10 +44,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="36dp"
                 android:gravity="center_vertical"
                 android:text="@string/profile_icon"
-                android:textColor="@color/colorTextBlack"
+                android:textColor="@color/colorGray2"
                 android:textSize="18sp" />
 
             <ImageView
@@ -80,6 +85,7 @@
             app:canNav="true"
             app:isBottom="true"
             app:name="@string/profile_sign" />
+
         <View
             android:id="@+id/bottomLine"
             android:layout_width="match_parent"
@@ -87,16 +93,16 @@
             android:background="#c8c8c8" />
 
         <TextView
-            android:gravity="center"
             android:id="@+id/btn_logout"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
-            android:background="@drawable/btn_circle"
-            android:text="@string/str_exit"
-            android:textColor="@color/white"
             android:layout_marginLeft="36dp"
             android:layout_marginRight="36dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/btn_circle"
+            android:gravity="center"
+            android:text="@string/str_exit"
+            android:textColor="@color/white"
             android:textSize="23sp" />
 
     </LinearLayout>

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private static final int IMAGE_STORE = 200;
     private final String beautyTypes[] = new String[]{"内置美颜", "插件美颜"};
     private TextView mProfileName, mProfileId;
-    private ImageView mAvatar, mEditProfile;
+    private ImageView mAvatar, mEditProfile, mSex;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
     private LineControllerView lcvQulity;
@@ -107,12 +106,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profileframent_layout, container, false);
-//        initState();
         view.findViewById(R.id.tv_logout).setOnClickListener(this);
         mAvatar = (ImageView) view.findViewById(R.id.profile_avatar);
         mProfileName = (TextView) view.findViewById(R.id.profile_name);
         mProfileId = (TextView) view.findViewById(R.id.profile_id);
         mEditProfile = (ImageView) view.findViewById(R.id.edit_profile);
+        mSex = (ImageView) view.findViewById(R.id.profile_sex);
         mEditProfile.setOnClickListener(this);
 
         // 设置我的钱包点击事件
@@ -142,21 +141,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         return view;
     }
 
-    private void initState() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
-        }
-
-    }
     @Override
     public void onDestroy() {
         if (null != mLoginHeloper)
@@ -453,6 +437,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             SxbLog.d(TAG, "profile avator: " + url);
             RequestManager req = Glide.with(getActivity());
             req.load(url).transform(new GlideCircleTransform(getActivity())).into(mAvatar);
+        }
+        if (MySelfInfo.getInstance().getSex() == null) {
+            mSex.setImageResource(R.drawable.sex_girl);
+        }else {
+            String sex = MySelfInfo.getInstance().getSex();
+            mSex.setImageResource(sex.equals("女")?R.drawable.sex_girl:R.drawable.sex_boy);
         }
     }
 

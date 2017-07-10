@@ -34,6 +34,15 @@ public class MySelfInfo {
     private int beautyType;     // 美颜类型 0: 内置美颜  1: 插件美颜
     private String guestRole = "";           // 观看质量
 
+    private String sex;
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
     private int id_status;
 
@@ -141,6 +150,7 @@ public class MySelfInfo {
             editor.putInt(Constants.LOG_LEVEL, logLevel.ordinal());
             editor.putInt(Constants.BEAUTY_TYPE, beautyType);
             editor.putString(Constants.VIDEO_QULITY, guestRole);
+            editor.putString(Constants.USER_SEX, sex);
             editor.commit();
         }
     }
@@ -161,6 +171,7 @@ public class MySelfInfo {
         nickName = sharedata.getString(Constants.USER_NICK, null);
         avatar = sharedata.getString(Constants.USER_AVATAR, null);
         sign = sharedata.getString(Constants.USER_SIGN, null);
+        sex = sharedata.getString(Constants.USER_SEX, null);
         bLiveAnimator = sharedata.getBoolean(Constants.LIVE_ANIMATOR, false);
         beautyType = sharedata.getInt(Constants.BEAUTY_TYPE, 1);
         guestRole = sharedata.getString(Constants.VIDEO_QULITY, null);
