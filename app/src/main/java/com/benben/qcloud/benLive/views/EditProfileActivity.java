@@ -2,7 +2,9 @@ package com.benben.qcloud.benLive.views;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -26,8 +29,10 @@ import android.widget.Toast;
 
 import com.benben.qcloud.benLive.R;
 import com.benben.qcloud.benLive.model.MySelfInfo;
+import com.benben.qcloud.benLive.presenters.LoginHelper;
 import com.benben.qcloud.benLive.presenters.ProfileInfoHelper;
 import com.benben.qcloud.benLive.presenters.UploadHelper;
+import com.benben.qcloud.benLive.presenters.viewinface.LogoutView;
 import com.benben.qcloud.benLive.presenters.viewinface.ProfileView;
 import com.benben.qcloud.benLive.presenters.viewinface.UploadView;
 import com.benben.qcloud.benLive.utils.Constants;
@@ -36,6 +41,7 @@ import com.benben.qcloud.benLive.utils.SxbLog;
 import com.benben.qcloud.benLive.utils.UIUtils;
 import com.benben.qcloud.benLive.views.customviews.BaseActivity;
 import com.benben.qcloud.benLive.views.customviews.LineControllerView;
+import com.benben.qcloud.benLive.views.customviews.RadioGroupDialog;
 import com.benben.qcloud.benLive.views.customviews.TemplateTitle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -46,16 +52,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * 个人编辑页面
  */
-public class EditProfileActivity extends BaseActivity implements View.OnClickListener, ProfileView, UploadView{
+public class EditProfileActivity extends BaseActivity implements View.OnClickListener, ProfileView,
+        UploadView, LogoutView {
     private final static int REQ_EDIT_NICKNAME = 0x100;
-    private final static int REQ_EDIT_SIGN  = 0x200;
+    private final static int REQ_EDIT_SIGN = 0x200;
 
     private static final int CROP_CHOOSE = 10;
     private static final int CAPTURE_IMAGE_CAMERA = 100;
     private static final int IMAGE_STORE = 200;
+    @BindView(R.id.userId)
+    LineControllerView userId;
+    @BindView(R.id.lcv_ep_sex)
+    LineControllerView lcvEpSex;
 
     private UploadHelper mUploadHelper;
     private ProfileInfoHelper mProfileInfoHelper;
@@ -65,28 +80,37 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private LineControllerView lcvNickName;
     private LineControllerView lcvSign;
     private boolean bPermission = false;
+    private boolean firstSex = false;
 
     private Uri iconUrl, iconCrop;
 
-    private void updateView(){
+    private LoginHelper mLoginHelper;
+
+    private void updateView() {
+        userId.setContent(MySelfInfo.getInstance().getId());
         lcvNickName.setContent(MySelfInfo.getInstance().getNickName());
         lcvSign.setContent(MySelfInfo.getInstance().getSign());
-        if (TextUtils.isEmpty(MySelfInfo.getInstance().getAvatar())){
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), com.benben.qcloud.benLive.R.drawable.default_avatar);
+        if (TextUtils.isEmpty(MySelfInfo.getInstance().getAvatar())) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.touxiang);
             Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
             ivIcon.setImageBitmap(cirBitMap);
-        }else{
+        } else {
             SxbLog.d(TAG, "profile avator: " + MySelfInfo.getInstance().getAvatar());
             RequestManager req = Glide.with(this);
             req.load(MySelfInfo.getInstance().getAvatar()).transform(new GlideCircleTransform(this)).into(ivIcon);
         }
     }
 
-    private void initView(){
-        ttEdit = (TemplateTitle) findViewById(com.benben.qcloud.benLive.R.id.tt_edit);
-        ivIcon = (ImageView) findViewById(com.benben.qcloud.benLive.R.id.iv_ep_icon);
-        lcvNickName = (LineControllerView) findViewById(com.benben.qcloud.benLive.R.id.lcv_ep_nickname);
-        lcvSign = (LineControllerView) findViewById(com.benben.qcloud.benLive.R.id.lcv_ep_sign);
+    private void initView() {
+        if (MySelfInfo.getInstance().getSex() == null) {
+            firstSex = true;
+        }
+        lcvEpSex.setContent(MySelfInfo.getInstance().getSex());
+        Log.e(TAG, "initView: first = " + firstSex);
+        ttEdit = (TemplateTitle) findViewById(R.id.tt_edit);
+        ivIcon = (ImageView) findViewById(R.id.iv_ep_icon);
+        lcvNickName = (LineControllerView) findViewById(R.id.lcv_ep_nickname);
+        lcvSign = (LineControllerView) findViewById(R.id.lcv_ep_sign);
 
         ttEdit.setReturnListener(new View.OnClickListener() {
             @Override
@@ -101,10 +125,11 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.benben.qcloud.benLive.R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_edit_profile);
+        ButterKnife.bind(this);
         initStatus();
         initView();
-
+        mLoginHelper = new LoginHelper(this, this);
         mProfileInfoHelper = new ProfileInfoHelper(this);
         mUploadHelper = new UploadHelper(this, this);
 
@@ -125,10 +150,10 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private Uri createCoverUri(String type) {
-        String filename = MySelfInfo.getInstance().getId()+ type + ".jpg";
+        String filename = MySelfInfo.getInstance().getId() + type + ".jpg";
         File outputImage = new File(Environment.getExternalStorageDirectory(), filename);
         if (ContextCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(EditProfileActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_PERMISSION_REQ_CODE);
             return null;
         }
@@ -144,16 +169,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         return UIUtils.getUriFromFile(this, outputImage);
     }
 
-    private boolean checkCropPermission(){
+    private boolean checkCropPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.READ_PHONE_STATE)){
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.READ_PHONE_STATE)) {
                 permissions.add(Manifest.permission.READ_PHONE_STATE);
             }
-            if (permissions.size() != 0){
+            if (permissions.size() != 0) {
                 ActivityCompat.requestPermissions(EditProfileActivity.this,
                         (String[]) permissions.toArray(new String[0]),
                         Constants.WRITE_PERMISSION_REQ_CODE);
@@ -171,8 +196,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
      * @param type
      */
     private void getPicFrom(int type) {
-        if (!bPermission){
-            Toast.makeText(this, getString(com.benben.qcloud.benLive.R.string.tip_no_permission), Toast.LENGTH_SHORT).show();
+        if (!bPermission) {
+            Toast.makeText(this, getString(R.string.tip_no_permission), Toast.LENGTH_SHORT).show();
             return;
         }
         switch (type) {
@@ -204,7 +229,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         Window dlgwin = pickDialog.getWindow();
         WindowManager.LayoutParams lp = dlgwin.getAttributes();
         dlgwin.setGravity(Gravity.BOTTOM);
-        lp.width = (int)(display.getWidth()); //设置宽度
+        lp.width = (int) (display.getWidth()); //设置宽度
 
         pickDialog.getWindow().setAttributes(lp);
 
@@ -277,41 +302,41 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK){
+        if (resultCode != RESULT_OK) {
             SxbLog.e(TAG, "onActivityResult->failed for request: " + requestCode + "/" + resultCode);
             return;
         }
-        switch (requestCode){
-        case REQ_EDIT_NICKNAME:
-            mProfileInfoHelper.setMyNickName(data.getStringExtra(EditActivity.RETURN_EXTRA));
-            break;
-        case REQ_EDIT_SIGN:
-            mProfileInfoHelper.setMySign(data.getStringExtra(EditActivity.RETURN_EXTRA));
-            break;
-        case CAPTURE_IMAGE_CAMERA:
-            startPhotoZoom(iconUrl);
-            break;
-        case IMAGE_STORE:
-            String path = UIUtils.getPath(this, data.getData());
-            if (null != path){
-                SxbLog.e(TAG, "startPhotoZoom->path:" + path);
-                File file = new File(path);
-                startPhotoZoom(UIUtils.getUriFromFile(this, file));
-            }
-            break;
-        case CROP_CHOOSE:
-            mUploadHelper.uploadCover(iconCrop.getPath());
-            break;
+        switch (requestCode) {
+            case REQ_EDIT_NICKNAME:
+                mProfileInfoHelper.setMyNickName(data.getStringExtra(EditActivity.RETURN_EXTRA));
+                break;
+            case REQ_EDIT_SIGN:
+                mProfileInfoHelper.setMySign(data.getStringExtra(EditActivity.RETURN_EXTRA));
+                break;
+            case CAPTURE_IMAGE_CAMERA:
+                startPhotoZoom(iconUrl);
+                break;
+            case IMAGE_STORE:
+                String path = UIUtils.getPath(this, data.getData());
+                if (null != path) {
+                    SxbLog.e(TAG, "startPhotoZoom->path:" + path);
+                    File file = new File(path);
+                    startPhotoZoom(UIUtils.getUriFromFile(this, file));
+                }
+                break;
+            case CROP_CHOOSE:
+                mUploadHelper.uploadCover(iconCrop.getPath());
+                break;
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case Constants.WRITE_PERMISSION_REQ_CODE:
-                for (int ret : grantResults){
-                    if (ret != PackageManager.PERMISSION_GRANTED){
+                for (int ret : grantResults) {
+                    if (ret != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
                 }
@@ -324,9 +349,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void updateProfileInfo(TIMUserProfile profile) {
-        if (TextUtils.isEmpty(profile.getNickName())){
+        if (TextUtils.isEmpty(profile.getNickName())) {
             MySelfInfo.getInstance().setNickName(profile.getIdentifier());
-        }else{
+        } else {
             MySelfInfo.getInstance().setNickName(profile.getNickName());
         }
         MySelfInfo.getInstance().setSign(profile.getSelfSignature());
@@ -339,14 +364,64 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public void onUploadProcess(int percent) {}
+    public void onUploadProcess(int percent) {
+    }
 
     @Override
     public void onUploadResult(int code, String url) {
         if (0 == code) {
             mProfileInfoHelper.setMyAvator(url);
-        }else{
-            SxbLog.w(TAG, "onUploadResult->failed: "+code);
+        } else {
+            SxbLog.w(TAG, "onUploadResult->failed: " + code);
         }
+    }
+
+    @OnClick({R.id.lcv_ep_sex, R.id.btn_logout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.lcv_ep_sex:
+                if (!firstSex) {
+                    Toast.makeText(this, "性别不可修改", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showSexSelect();
+                break;
+            case R.id.btn_logout:
+                if (mLoginHelper != null) {
+                    mLoginHelper.standardLogout(MySelfInfo.getInstance().getId());
+                }
+                break;
+        }
+    }
+
+    private void showSexSelect() {
+        final String[] sexs = new String[]{"男","女"};
+        RadioGroupDialog dialog = new RadioGroupDialog(this, sexs);
+        dialog.setTitle("请选择性别：(性别不能更改)");
+        dialog.setOnItemClickListener(new RadioGroupDialog.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                MySelfInfo.getInstance().setSex(sexs[position]);
+                MySelfInfo.getInstance().writeToCache(EditProfileActivity.this);
+                Log.e(TAG, "onItemClick: sex = " + MySelfInfo.getInstance().getSex());
+                lcvEpSex.setContent(MySelfInfo.getInstance().getSex());
+            }
+        });
+        firstSex = false;
+        dialog.show();
+    }
+
+    @Override
+    public void logoutSucc() {
+        SharedPreferences.Editor editor = getSharedPreferences("data", Context.MODE_PRIVATE).edit();
+        editor.putBoolean("living", false);
+        editor.apply();
+        Toast.makeText(this, "退出成功", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,LoginActivity.class));
+    }
+
+    @Override
+    public void logoutFail() {
+
     }
 }

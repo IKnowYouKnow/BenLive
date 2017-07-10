@@ -63,7 +63,7 @@ public interface I {
 
 	String UTF_8 									= 		"utf-8";
 
-	String SERVER_ROOT = "http://192.168.0.116/app.mmhzyf.com/index.php/Info/";
+	String SERVER_ROOT = "http://192.168.0.129/app.mmhzyf.com/index.php/Info/";
 
 	/** 上传头像图片的类型：user_avatar或group_icon */
 	String AVATAR_TYPE 								= 		"avatarType";
