@@ -132,6 +132,18 @@
             app:isBottom="true"
             app:name="@string/str_video_invite_friend" />
 
+        <com.benben.qcloud.benLive.views.customviews.LineControllerView
+            android:id="@+id/lcv_suggest"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:isBottom="true"
+            app:name="@string/str_video_suggest" />
+        <com.benben.qcloud.benLive.views.customviews.LineControllerView
+            android:id="@+id/lcv_about_me"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:isBottom="true"
+            app:name="@string/str_video_about_me" />
         <TextView
             android:id="@+id/tv_logout"
             android:layout_width="fill_parent"
@@ -141,6 +153,7 @@
             android:background="@color/btn_red"
             android:gravity="center"
             android:text="@string/str_exit"
+            android:visibility="gone"
             android:textColor="@color/colorTextWhite"
             android:textSize="@dimen/h9"
             android:textStyle="bold" />

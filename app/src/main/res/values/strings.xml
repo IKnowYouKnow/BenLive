@@ -68,6 +68,8 @@
     <string name="profile_title">编辑个人信息</string>
     <string name="profile_icon">头像</string>
     <string name="profile_nickname">昵称</string>
+    <string name="profile_sex">性别</string>
+    <string name="profile_id">ID:</string>
     <string name="profile_sign">签名</string>
     <string name="profile_set">设置</string>
 
@@ -170,6 +172,8 @@
     <string name="str_video_my_money">我的收益</string>
     <string name="str_video_push_money">充值</string>
     <string name="str_video_invite_friend">邀请好友</string>
+    <string name="str_video_suggest">用户反馈</string>
+    <string name="str_video_about_me">关于我们</string>
     <string name="str_video_achor_check">主播认证</string>
     <string name="str_video_sd">清晰</string>
     <string name="str_video_ld">流畅</string>
@@ -180,5 +184,5 @@
     <string name="str_btn_log_upload">上报</string>
     <string name="str_tips_link_limit">已经达到跨房连麦上限</string>
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
-    <string name="str_exit">退出登录</string>
+    <string name="str_exit">注销登录</string>
 </resources>

@@ -13,13 +13,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:backText="@string/btn_return"
-        app:titleText="@string/profile_title" />
+        app:titleText="@string/profile_set" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <com.benben.qcloud.benLive.views.customviews.LineControllerView
+            android:id="@+id/userId"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            app:name="@string/profile_id" />
 
         <RelativeLayout
             android:id="@+id/rl_ep_icon"
@@ -57,6 +64,15 @@
             app:name="@string/profile_nickname" />
 
         <com.benben.qcloud.benLive.views.customviews.LineControllerView
+            android:id="@+id/lcv_ep_sex"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:onClick="onClick"
+            app:canNav="true"
+            app:isBottom="true"
+            app:name="@string/profile_sex" />
+
+        <com.benben.qcloud.benLive.views.customviews.LineControllerView
             android:id="@+id/lcv_ep_sign"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -64,6 +80,25 @@
             app:canNav="true"
             app:isBottom="true"
             app:name="@string/profile_sign" />
+        <View
+            android:id="@+id/bottomLine"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#c8c8c8" />
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/btn_logout"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/btn_circle"
+            android:text="@string/str_exit"
+            android:textColor="@color/white"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="150dp"
+            android:textSize="23sp" />
+
     </LinearLayout>
 
 </LinearLayout>
