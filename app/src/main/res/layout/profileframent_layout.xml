@@ -55,17 +55,17 @@
             android:id="@+id/profile_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/sex_girl"
+            android:layout_below="@id/profile_avatar"
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@id/profile_name"
-            android:layout_below="@id/profile_avatar"/>
+            android:src="@drawable/sex_girl" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -125,6 +125,7 @@
             app:canNav="true"
             app:isBottom="true"
             app:name="@string/str_video_push_money" />
+
         <com.benben.qcloud.benLive.views.customviews.LineControllerView
             android:id="@+id/lcv_invite_friend"
             android:layout_width="match_parent"
@@ -139,12 +140,14 @@
             android:layout_height="40dp"
             app:isBottom="true"
             app:name="@string/str_video_suggest" />
+
         <com.benben.qcloud.benLive.views.customviews.LineControllerView
             android:id="@+id/lcv_about_me"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             app:isBottom="true"
             app:name="@string/str_video_about_me" />
+
         <TextView
             android:id="@+id/tv_logout"
             android:layout_width="fill_parent"
@@ -154,10 +157,10 @@
             android:background="@color/btn_red"
             android:gravity="center"
             android:text="@string/str_exit"
-            android:visibility="gone"
             android:textColor="@color/colorTextWhite"
             android:textSize="@dimen/h9"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

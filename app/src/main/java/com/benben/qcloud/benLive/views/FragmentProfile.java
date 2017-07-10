@@ -69,6 +69,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
 
     private final static int REQ_EDIT_NICKNAME = 0x100;
     private final static int REQ_EDIT_SIGN  = 0x200;
+    private final static int REQ_FEEDBACK  = 0x300;
     private Uri iconUrl, iconCrop;
     private ProfileInfoHelper mProfileInfoHelper;
     private UploadHelper mUploadHelper;
@@ -81,7 +82,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private ImageView mAvatar, mEditProfile, mSex;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView lcvQulity;
+    private LineControllerView lcvQulity, mFeedBack;
     private CustomSwitch csAnimator;
     // 我的钱包
     private LineControllerView myWallet;
@@ -118,6 +119,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         myWallet = (LineControllerView) view.findViewById(R.id.lcv_my_wallet);
         myWallet.setOnClickListener(this);
 
+        // 用户反馈
+        mFeedBack = (LineControllerView) view.findViewById(R.id.lcv_suggest);
+        mFeedBack.setOnClickListener(this);
         // 设置头像的点击事件
         mAvatar.setOnClickListener(this);
         csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
@@ -197,7 +201,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 if (null != mLoginHeloper)
                     mLoginHeloper.standardLogout(MySelfInfo.getInstance().getId());
                 break;
-
+            case R.id.lcv_suggest:
+                EditActivity.navToEdit(this, "用户反馈", "请输入对我们的意见，我们将会做到更好", REQ_FEEDBACK);
+                break;
             // 点击我的钱包跳转到钱包界面
             case R.id.lcv_my_wallet:
                 startActivity(new Intent(getContext(),WalletActivity.class));
@@ -288,6 +294,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 break;
             case CAPTURE_IMAGE_CAMERA:
                 startPhotoZoom(iconUrl);
+                break;
+            case REQ_FEEDBACK:
+                Toast.makeText(getContext(), "感谢您的反馈，我们会继续努力的", Toast.LENGTH_SHORT).show();
                 break;
             case IMAGE_STORE:
                 String path = UIUtils.getPath(getActivity(), data.getData());
