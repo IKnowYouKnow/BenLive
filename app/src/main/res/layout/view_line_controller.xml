@@ -32,12 +32,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/colorGray2" />
-            <ImageView
+            <TextView
                 android:id="@+id/rightArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_right"/>
+                android:textSize="18sp"
+                android:alpha="0.8"
+                android:text=">"/>
         </LinearLayout>
         <Switch
             android:id="@+id/btnSwitch"

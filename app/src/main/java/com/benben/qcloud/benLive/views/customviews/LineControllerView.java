@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -48,7 +47,7 @@ public class LineControllerView extends LinearLayout {
         tvContent.setText(getShortenStr(content));
         View bottomLine = findViewById(R.id.bottomLine);
         bottomLine.setVisibility(isBottom ? VISIBLE : GONE);
-        ImageView navArrow = (ImageView) findViewById(R.id.rightArrow);
+        TextView navArrow = (TextView) findViewById(R.id.rightArrow);
         navArrow.setVisibility(canNav ? VISIBLE : GONE);
         LinearLayout contentPanel = (LinearLayout) findViewById(R.id.contentText);
         contentPanel.setVisibility(isSwitch ? GONE : VISIBLE);
@@ -87,7 +86,7 @@ public class LineControllerView extends LinearLayout {
      */
     public void setCanNav(boolean canNav){
         this.canNav = canNav;
-        ImageView navArrow = (ImageView) findViewById(R.id.rightArrow);
+        TextView navArrow = (TextView) findViewById(R.id.rightArrow);
         navArrow.setVisibility(canNav ? VISIBLE : GONE);
     }
 
