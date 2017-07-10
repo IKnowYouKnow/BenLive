@@ -51,15 +51,13 @@
             android:layout_marginTop="45dp"
             android:src="@drawable/shezhi" />
 
-
         <ImageView
             android:id="@+id/profile_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/xingbie"
-            android:layout_above="@+id/profile_name"
-            android:layout_alignEnd="@+id/profile_avatar"
-            android:layout_marginBottom="14dp" />
+            android:layout_toRightOf="@id/profile_name"
+            android:layout_below="@id/profile_avatar"/>
     </RelativeLayout>
 
     <LinearLayout
