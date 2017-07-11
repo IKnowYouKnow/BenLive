@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_recharge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true">
+
+    <com.benben.qcloud.benLive.views.customviews.TemplateTitle
+        android:id="@+id/ttHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="@string/str_video_service_list" />
+    <LinearLayout
+        android:layout_below="@id/ttHead"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_below="@id/ttHead"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编号"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorGray2"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="微信号"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/colorGray2"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="支付宝"
+            android:gravity="center"
+            android:textColor="@color/colorGray2"
+            android:textSize="20sp"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/head"
+        android:background="@color/line"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvServiceList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line"
+        android:background="@color/white" />
+</RelativeLayout>

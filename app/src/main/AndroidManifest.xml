@@ -109,8 +109,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".views.customviews.WalletActivity" />
-        <activity android:name=".views.FoundPwdActivity"></activity>
-        <activity android:name=".views.AnchorCheckActivity"/>
+        <activity android:name=".views.FoundPwdActivity" />
+        <activity android:name=".views.AnchorCheckActivity" />
+        <activity android:name=".views.RechargeActivity"></activity>
     </application>
 
 </manifest>

@@ -171,6 +171,7 @@
     <string name="str_video_qulity">清晰度</string>
     <string name="str_video_my_money">我的收益</string>
     <string name="str_video_push_money">充值</string>
+    <string name="str_video_service_list">客服列表</string>
     <string name="str_video_invite_friend">邀请好友</string>
     <string name="str_video_suggest">用户反馈</string>
     <string name="str_video_about_me">关于我们</string>
@@ -186,4 +187,5 @@
     <string name="str_beauty_not_support">ILive美颜暂不支持，敬请期待</string>
     <string name="str_exit">注销登录</string>
     <string name="str_commit_check">提交认证</string>
+
 </resources>

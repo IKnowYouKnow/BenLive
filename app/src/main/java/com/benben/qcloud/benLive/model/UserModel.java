@@ -41,4 +41,14 @@ public class UserModel implements IUserModel {
                 .targetClass(String.class)
                 .execute(listener);
     }
+
+    @Override
+    public void getRechargerList(Context context, OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl("servicer")
+                .targetClass(String.class)
+                .execute(listener);
+    }
+
+
 }

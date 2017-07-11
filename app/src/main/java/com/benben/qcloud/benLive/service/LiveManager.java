@@ -125,18 +125,19 @@ public class LiveManager {
             gifts = ResultUtils.getListResultFromJson(body, Gift.class);
             if (gifts != null && gifts.getRetCode() == 0) {
                 return gifts.getRetData();
-            }else {
+            } else {
                 Log.e(TAG, "getGiftList: error = " + gifts.getRetData());
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG, "getGiftList: 4" +e.getMessage().toString());
+            Log.e(TAG, "getGiftList: 4" + e.getMessage().toString());
         }
         return null;
     }
 
     /**
      * 根据用户名获取账户余额
+     *
      * @param username 用户名
      * @return
      */
@@ -163,16 +164,17 @@ public class LiveManager {
 
     /**
      * 注册账号
-     * @param username 手机号
-     * @param password 密码
-     * @param invitCode 邀请码
+     *
+     * @param username    手机号
+     * @param password    密码
+     * @param invitCode   邀请码
      * @param invitStatus 邀请码开关
-     * @param tenchRes 腾讯注册结果
+     * @param tenchRes    腾讯注册结果
      * @return
      */
     public Result register(String username,
-                            String password, String invitCode,
-                            String invitStatus, String tenchRes) {
+                           String password, String invitCode,
+                           String invitStatus, String tenchRes) {
         Call<String> call = service.register(username, password, invitCode, invitStatus, tenchRes);
         try {
             Response<String> res = call.execute();
@@ -191,6 +193,7 @@ public class LiveManager {
 
     /**
      * 忘记密码
+     *
      * @param phoneNum 手机号
      * @param password 新密码
      * @return
@@ -218,8 +221,9 @@ public class LiveManager {
 
     /**
      * 发送手机验证码
+     *
      * @param mobile 手机号
-     * @param code 随机生成的验证码
+     * @param code   随机生成的验证码
      * @return
      */
     public int sendCheckCode(String mobile, String code) {
@@ -238,6 +242,12 @@ public class LiveManager {
         return -1;
     }
 
+    /**
+     * 登录
+     * @param userId 用户名
+     * @param pwd 密码
+     * @return
+     */
     public String login(String userId, String pwd) {
         Call<String> call = service.login(userId, pwd);
         try {
@@ -252,8 +262,10 @@ public class LiveManager {
         }
         return null;
     }
+
     /**
      * 检查是否需要注册
+     *
      * @return
      */
     public int checkIsRegister() {
@@ -279,8 +291,19 @@ public class LiveManager {
         return 2;
     }
 
+    /**
+     * 主播认证
+     *
+     * @param username   用户名
+     * @param phoneNum   联系方式
+     * @param userId     账号
+     * @param weChatId   微信号
+     * @param aliPayId   支付宝号
+     * @param aliPayName 收款人姓名
+     * @return
+     */
     public int anchorCheck(String username, String phoneNum, String userId, String weChatId,
-                           String aliPayId, String aliPayName){
+                           String aliPayId, String aliPayName) {
         Call<String> call = service.anchorCheck(username, phoneNum, userId, weChatId, aliPayId, aliPayName);
         try {
             Response<String> response = call.execute();
@@ -298,6 +321,27 @@ public class LiveManager {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    /**
+     * 获取客服列表
+     * @return
+     */
+    public String getRechargeList() {
+        Call<String> call = service.getRechargeList();
+        try {
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "getRechargeList: error = " + response.errorBody());
+                return null;
+            }
+            String json = response.body();
+
+            return json;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

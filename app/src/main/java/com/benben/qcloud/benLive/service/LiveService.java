@@ -87,4 +87,8 @@ public interface LiveService {
                              @Query("wx_code") String wechatId,
                              @Query("ali_code") String aliPayId,
                              @Query("ali_name") String aliName);
+
+    /** 获取客服列表 */
+    @GET("servicer")
+    Call<String> getRechargeList();
 }

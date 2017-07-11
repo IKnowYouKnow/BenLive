@@ -68,13 +68,14 @@ public class ResultUtils {
         }
         return null;
     }
+
+    private static final String TAG = "ResultUtils";
     public static <T> Result getListResultFromJson(String jsonStr, Class<T> clazz){
         Result result = new Result();
         Log.e("Utils","jsonStr="+jsonStr);
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);
             result.setRetCode(jsonObject.getInt("code"));
-//            result.setRetMsg(jsonObject.getBoolean("retMsg"));
             if(!jsonObject.isNull("data")) {
                 JSONArray array = jsonObject.getJSONArray("data");
                 if (array != null) {
@@ -88,6 +89,7 @@ public class ResultUtils {
                     return result;
                 }
             }
+            Log.e(TAG, "getListResultFromJson: result = "+result );
             return result;
         }catch (Exception e){
             e.printStackTrace();

@@ -12,4 +12,6 @@ public interface IUserModel {
     void unregister(Context context, String username, OnCompleteListener<String> listener);
 
     void getUserInfo(Context context, String username, OnCompleteListener<String> listener);
+
+    void getRechargerList(Context context, OnCompleteListener<String> listener);
 }

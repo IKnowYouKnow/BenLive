@@ -83,7 +83,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private ImageView mAvatar, mEditProfile, mSex;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView lcvQulity, mFeedBack, mAnchorCheck;
+    private LineControllerView lcvQulity, mFeedBack, mAnchorCheck, pushMoney;
     private CustomSwitch csAnimator;
     // 我的钱包
     private LineControllerView myWallet;
@@ -127,6 +127,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         // 主播认证
         mAnchorCheck = (LineControllerView) view.findViewById(R.id.lcv_achor_check);
         mAnchorCheck.setOnClickListener(this);
+
+        // 充值
+        pushMoney = (LineControllerView) view.findViewById(R.id.lcv_integral_center);
+        pushMoney.setOnClickListener(this);
 
         // 设置头像的点击事件
         mAvatar.setOnClickListener(this);
@@ -213,6 +217,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             // 点击我的钱包跳转到钱包界面
             case R.id.lcv_my_wallet:
                 startActivity(new Intent(getContext(),WalletActivity.class));
+                break;
+            //充值跳转到客服列表
+            case R.id.lcv_integral_center:
+                startActivity(new Intent(getContext(),RechargeActivity.class));
                 break;
             case R.id.lcv_achor_check:
                 startActivityForResult(new Intent(getActivity(), AnchorCheckActivity.class), REQ_ANCHOR_CHECK);
