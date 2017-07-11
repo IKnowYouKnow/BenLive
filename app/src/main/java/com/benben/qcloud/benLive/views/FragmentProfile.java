@@ -70,6 +70,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private final static int REQ_EDIT_NICKNAME = 0x100;
     private final static int REQ_EDIT_SIGN  = 0x200;
     private final static int REQ_FEEDBACK  = 0x300;
+    private final static int REQ_ANCHOR_CHECK  = 0x400;
     private Uri iconUrl, iconCrop;
     private ProfileInfoHelper mProfileInfoHelper;
     private UploadHelper mUploadHelper;
@@ -82,7 +83,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
     private ImageView mAvatar, mEditProfile, mSex;
     private LoginHelper mLoginHeloper;
     private ProfileInfoHelper mProfileHelper;
-    private LineControllerView lcvQulity, mFeedBack;
+    private LineControllerView lcvQulity, mFeedBack, mAnchorCheck;
     private CustomSwitch csAnimator;
     // 我的钱包
     private LineControllerView myWallet;
@@ -122,6 +123,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
         // 用户反馈
         mFeedBack = (LineControllerView) view.findViewById(R.id.lcv_suggest);
         mFeedBack.setOnClickListener(this);
+
+        // 主播认证
+        mAnchorCheck = (LineControllerView) view.findViewById(R.id.lcv_achor_check);
+        mAnchorCheck.setOnClickListener(this);
+
         // 设置头像的点击事件
         mAvatar.setOnClickListener(this);
         csAnimator = (CustomSwitch) view.findViewById(R.id.cs_animator);
@@ -207,6 +213,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
             // 点击我的钱包跳转到钱包界面
             case R.id.lcv_my_wallet:
                 startActivity(new Intent(getContext(),WalletActivity.class));
+                break;
+            case R.id.lcv_achor_check:
+                startActivityForResult(new Intent(getActivity(), AnchorCheckActivity.class), REQ_ANCHOR_CHECK);
                 break;
         }
     }
@@ -308,6 +317,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, L
                 break;
             case CROP_CHOOSE:
                 mUploadHelper.uploadCover(iconCrop.getPath());
+                break;
+            case REQ_ANCHOR_CHECK:
+                Toast.makeText(getContext(), "认证成功，开始你的直播吧", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

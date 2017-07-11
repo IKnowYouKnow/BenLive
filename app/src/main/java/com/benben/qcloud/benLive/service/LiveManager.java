@@ -278,5 +278,26 @@ public class LiveManager {
         }
         return 2;
     }
+
+    public int anchorCheck(String username, String phoneNum, String userId, String weChatId,
+                           String aliPayId, String aliPayName){
+        Call<String> call = service.anchorCheck(username, phoneNum, userId, weChatId, aliPayId, aliPayName);
+        try {
+            Response<String> response = call.execute();
+            if (!response.isSuccessful()) {
+                Log.e(TAG, "anchorCheck: error = " + response.errorBody());
+                return -1;
+            }
+            String json = response.body();
+            JSONObject obj = new JSONObject(json);
+            int code = obj.getInt("code");
+            return code;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
 

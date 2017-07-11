@@ -78,4 +78,13 @@ public interface LiveService {
      */
     @GET("check_invite")
     Call<String> checkIsRegister();
+
+    /** 主播认证 */
+    @GET("apply_live")
+    Call<String> anchorCheck(@Query("supplier_name") String usernamme,
+                             @Query("phone") String phoneNum,
+                             @Query("autor") String userId,
+                             @Query("wx_code") String wechatId,
+                             @Query("ali_code") String aliPayId,
+                             @Query("ali_name") String aliName);
 }

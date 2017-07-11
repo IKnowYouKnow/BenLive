@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.benben.qcloud.benLive.views.customviews.TemplateTitle
+        android:id="@+id/tt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="主播认证" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="姓名："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:hint="请输入您的姓名"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="账号名："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/userId"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:editable="false"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="收款人姓名："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/money_name"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:layout_marginLeft="10dp"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:hint="请输入收款人姓名"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="联系方式："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/phoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:layout_marginLeft="10dp"
+                android:inputType="number"
+                android:maxLength="11"
+                android:hint="请输入您的联系方式"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="微信账号："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/wechatId"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:hint="请输入您的微信号"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="支付宝账号："
+                android:textColor="@color/colorGray2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/aliPayId"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:hint="请输入您的支付宝账号"
+                android:textCursorDrawable="@color/line"
+                android:background="@null"
+                android:textColor="@color/colorGray2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
+
+        <Button
+            android:id="@+id/commit_check"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/btn_circle"
+            android:text="@string/str_commit_check"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+    </LinearLayout>
+
+</LinearLayout>
